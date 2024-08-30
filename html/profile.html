@@ -4,62 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль пользователя - Workly</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="/css/styles_profile.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
-    <!-- Навигационная панель -->
     <header>
         <nav class="navbar">
             <a class="navbar-brand" href="main.html">
                 <span class="brand-text">Workly</span>
-                <span class="material-symbols-outlined">
-                    done_outline
-                </span>
             </a>
+            <div class="profile-icon">
+                <span class="material-symbols-outlined">account_circle</span>
+            </div>
         </nav>
     </header>
 
-    <!-- Основной контент профиля -->
-    <main class="profile-container">
-        <section class="profile-header">
-            <div class="avatar-container">
-                <img id="userAvatar" class="avatar" src="/images/default-avatar.png" alt="User Avatar">
-                <button id="changeAvatarBtn" class="btn btn-secondary">Сменить аватар</button>
-            </div>
-            <div class="profile-info">
-                <label for="userName">Ваше имя:</label>
-                <input type="text" id="userName" class="form-control" value="Имя пользователя">
-                <button id="saveNameBtn" class="btn btn-primary">Сохранить</button>
-            </div>
-        </section>
-
-        <section class="notifications">
-            <h2>Уведомления</h2>
-            <ul id="notificationList" class="notification-list">
-                <!-- Уведомления будут динамически добавляться сюда -->
-                <li class="notification-item">Нет новых уведомлений.</li>
-            </ul>
-        </section>
-
-        <section class="team-creation">
-            <h2>Создать команду</h2>
-            <form id="teamForm">
-                <div class="form-group">
-                    <label for="teamName">Название команды:</label>
-                    <input type="text" id="teamName" class="form-control" required>
+    <main>
+        <section class="profile-container">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img id="avatar" class="avatar" src="imgs/profileIcons/default-avatar.png" alt="Profile Avatar">
+                    <button id="changeAvatarButton" class="btn btn-primary">Изменить аватар</button>
                 </div>
-                <div class="form-group">
-                    <label for="teamMembers">Участники команды (email через запятую):</label>
-                    <input type="text" id="teamMembers" class="form-control">
+                <div class="profile-info">
+                    <h1>Профиль пользователя</h1>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="username">Имя:</label>
+                            <input type="text" id="username" class="form-control" value="Имя пользователя" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Создать команду</button>
-            </form>
+            </div>
+
+            <div class="notifications">
+                <h2>Уведомления</h2>
+                <ul id="notificationList" class="notification-list">
+                    <!-- Уведомления будут динамически добавляться сюда -->
+                </ul>
+            </div>
+
+            <div class="team-creation">
+                <h2>Создание команды</h2>
+                <form id="teamForm">
+                    <div class="form-group">
+                        <label for="teamName">Название команды:</label>
+                        <input type="text" id="teamName" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Создать команду</button>
+                </form>
+            </div>
         </section>
     </main>
+
+    <!-- Модальное окно для выбора аватара -->
+    <div id="avatarModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Выберите аватар</h2>
+            <div id="avatarGallery" class="avatar-gallery">
+                <!-- Аватары будут динамически добавляться сюда -->
+            </div>
+            <button id="selectAvatarButton" class="btn btn-primary">Выбрать</button>
+        </div>
+    </div>
 
     <script src="/js/profile.js"></script>
 </body>

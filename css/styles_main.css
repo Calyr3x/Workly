@@ -73,7 +73,6 @@ header.scrolled {
 /* Отступ для основного контента, чтобы не перекрывался хедером */
 main {
     padding-top: 80px;
-    /* Добавляем отступ сверху, равный высоте хедера плюс небольшой запас */
 }
 
 .btn {
@@ -303,6 +302,7 @@ main {
     align-items: center;
     margin-left: auto;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .profile-icon .material-symbols-outlined {
