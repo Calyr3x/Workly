@@ -254,7 +254,7 @@ main {
 
 .btn-primary:hover {
     background-color: #0066ff;
-    transform: scale(1.05);
+    transform: scale(1.025);
 }
 
 /* Стили для текста ошибок */
@@ -295,4 +295,23 @@ main {
     border-color: #0044cc;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 68, 204, 0.2);
+}
+
+/* Стили для иконки входа */
+.profile-icon {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.profile-icon .material-symbols-outlined {
+    font-size: 36px;
+    color: #0044cc;
+    transition: transform 0.3s;
+}
+
+.profile-icon .material-symbols-outlined:hover {
+    transform: scale(1.05);
+    color: #0055ff;
 }
