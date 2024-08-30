@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let response;
             if (editingTaskID) {
                 // Редактирование существующей задачи
-                response = await fetch(`http://localhost:8080/tasks/update`, {
+                response = await fetch(`http://localhost:8081/tasks/update`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 // Создание новой задачи
-                response = await fetch('http://localhost:8080/tasks/create', {
+                response = await fetch('http://localhost:8081/tasks/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function deleteTask(taskID) {
         try {
-            const response = await fetch(`http://localhost:8080/tasks/delete?id=${taskID}`, {
+            const response = await fetch(`http://localhost:8081/tasks/delete?id=${taskID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для получения задач с сервера
     async function fetchTasks(userId) {
         try {
-            const response = await fetch(`http://localhost:8080/tasks?user_id=${userId}`);
+            const response = await fetch(`http://localhost:8081/tasks?user_id=${userId}`);
             if (response.ok) {
                 const tasks = await response.json();
                 taskList.innerHTML = '';
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('.edit-btn').forEach(button => {
                     button.addEventListener('click', (event) => {
                         const taskID = event.target.dataset.id;
-                        fetch(`http://localhost:8080/tasks/${taskID}`, {
+                        fetch(`http://localhost:8081/tasks/${taskID}`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json'
