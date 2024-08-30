@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarGallery = document.getElementById('avatarGallery');
     const avatar = document.getElementById('avatar');
     const closeModal = document.querySelector('.close');
-    const saveNameBtn = document.getElementById('saveNameBtn');
-    const teamForm = document.getElementById('teamForm');
+
+    let selectedAvatarSrc = '';
 
     // Открыть модальное окно для выбора аватара
     changeAvatarButton.addEventListener('click', () => {
@@ -20,24 +20,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Выбрать аватар
-    selectAvatarButton.addEventListener('click', () => {
+    selectAvatarButton.addEventListener('click', async () => {
         const selectedAvatar = document.querySelector('.avatar-gallery img.selected');
         if (selectedAvatar) {
-            avatar.src = selectedAvatar.src;
+            selectedAvatarSrc = selectedAvatar.src;
+            avatar.src = selectedAvatarSrc;
             avatarModal.style.display = 'none';
+
+            // Отправить выбранный аватар на сервер
+            await saveAvatar(selectedAvatarSrc);
         }
     });
 
+    async function saveAvatar(avatarSrc) {
+        const response = await fetch('http://localhost:8080/updateAvatar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                avatar: avatarSrc,
+            }),
+            credentials: 'include', // Включаем отправку куки
+        });
+
+        if (response.ok) {
+            alert('Аватар обновлен успешно.');
+        } else {
+            alert('Ошибка при обновлении аватара.');
+        }
+    }
+
+
     function loadAvatars() {
         const avatars = [
-            '1.png', // Предполагается, что файлы в папке imgs/profileIcons
+            '1.png',
             '2.png',
             '3.png',
-            '4.png'
-            // Добавьте все имена файлов, доступных для выбора
+            '4.png',
+            '5.png',
+            '6.png',
+            '7.png',
+            '8.png',
+            '9.png',
+            '10.png',
+            '11.png',
+            '12.png',
+            '13.png',
+            '14.png',
+            '15.png',
+            '16.png',
+            '17.png',
+            '18.png',
+            '19.png',
+            '20.png'
         ];
 
-        avatarGallery.innerHTML = ''; // Очистить галерею перед добавлением новых изображений
+        avatarGallery.innerHTML = '';
 
         avatars.forEach(fileName => {
             const img = document.createElement('img');
@@ -52,33 +91,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Сохранение имени пользователя
-    saveNameBtn.addEventListener('click', () => {
-        const userNameInput = document.getElementById('userName');
-        const userName = userNameInput.value.trim();
-        if (userName) {
-            alert(`Имя сохранено: ${userName}`);
-            // Логика сохранения имени на сервере
-        } else {
-            alert('Имя не может быть пустым.');
+    async function loadCurrentAvatar() {
+        const response = await fetch('/getCurrentAvatar');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.avatar) {
+                avatar.src = data.avatar;
+            } else {
+                // Если нет сохраненного аватара, установим случайный
+                const defaultAvatars = [
+                    '/imgs/profileIcons/1.png',
+                    '/imgs/profileIcons/2.png',
+                    '/imgs/profileIcons/3.png',
+                    '/imgs/profileIcons/4.png'
+                ];
+                avatar.src = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+            }
         }
-    });
+    }
 
-    // Обработка формы создания команды
-    teamForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const teamName = document.getElementById('teamName').value.trim();
-        const teamMembers = document.getElementById('teamMembers').value.trim();
-
-        if (teamName && teamMembers) {
-            alert(`Команда "${teamName}" создана с участниками: ${teamMembers}`);
-            // Логика создания команды на сервере
-        } else {
-            alert('Пожалуйста, заполните все поля.');
-        }
-    });
+    // Загрузить текущий аватар при загрузке страницы
+    loadCurrentAvatar();
 
     // Заглушка для уведомлений
     const notificationList = document.getElementById('notificationList');
-    notificationList.innerHTML = '<li class="notification-item">Нет новых уведомлений.</li>'
+    notificationList.innerHTML = '<li class="notification-item">Нет новых уведомлений.</li>';
 });

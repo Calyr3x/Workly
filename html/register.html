@@ -24,9 +24,15 @@
         <canvas class="animated-blob"></canvas>
         <section class="login">
             <div class="card">
-                <h2 class="card-title">Вход</h2>
+                <h2 class="card-title">Регистрация</h2>
                 <form id="loginForm">
-                    <div class="error-message"></div> <!-- Контейнер для ошибки -->
+                    <div class="error-message"></div>
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="text" class="form-control" id="text" name="text" placeholder=" " required>
+                            <label for="text">Имя пользователя</label>
+                        </div>
+                    </div> <!-- Контейнер для ошибки -->
                     <div class="form-group">
                         <div class="input-wrapper">
                             <input type="email" class="form-control" id="email" name="email" placeholder=" " required>
@@ -44,13 +50,12 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn" id="loginButton">Войти</button>
-                    <button type="submit" class="btn btn-secondary" id="registerButton">Зарегистрироваться</button>
+                    <button type="submit" class="btn" id="registerButton">Зарегистрироваться</button>
                 </form>
             </div>
         </section>
     </main>
-    <script src="/js/loginPage.js"></script>
+    <script src="/js/registerPage.js"></script>
 </body>
 
 </html>

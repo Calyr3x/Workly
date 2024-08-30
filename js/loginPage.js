@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.submitter === loginButton) {
             // Handle login
             await handleLogin(email, password);
-        } else if (event.submitter === registerButton) {
-            // Handle registration
-            await handleRegistration(email, password);
         }
     });
 
@@ -67,23 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function handleRegistration(email, password) {
-        try {
-            const response = await fetch('http://localhost:8080/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
+    //Включение\выключение видимости пароля
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordField = document.getElementById('password');
 
-            if (response.ok) {
-                alert('Registration successful');
-            } else {
-                alert('Registration failed');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    togglePassword.addEventListener('click', function () {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    });
+
+    //Редирект на страницу регистрации
+    registerButton.addEventListener('click', function () {
+        window.location.href = 'register.html';
+    });
 });
