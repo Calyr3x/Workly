@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                alert('Registration successful');
+                // Показываем улучшенную анимацию успешной регистрации с затемнением фона
+                showSuccessMessage();
             } else {
                 alert('Registration failed');
             }
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
         }
     }
-    //Включение\выключение видимости пароля
+
+    // Включение\выключение видимости пароля
     const togglePassword = document.getElementById('toggle-password');
     const passwordField = document.getElementById('password');
 
@@ -49,4 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
         this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
     });
 
+    function showSuccessMessage() {
+        const successMessage = document.getElementById('successMessage');
+        const overlay = document.getElementById('overlay');
+
+        // Показываем сообщение и затемненный фон
+        successMessage.classList.add('show');
+        overlay.classList.add('show');
+
+        // Скрыть сообщение и сделать редирект через 2 секунды
+        setTimeout(() => {
+            successMessage.classList.remove('show');
+            overlay.classList.remove('show');
+            window.location.href = 'login.html';
+        }, 4000); // Время анимации + задержка перед редиректом
+    }
 });

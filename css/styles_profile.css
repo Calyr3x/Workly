@@ -6,7 +6,7 @@ html {
     width: 100%;
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
+    background-color: #f0f4f9;
     color: #1a1a1a;
 }
 
@@ -70,7 +70,6 @@ main {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    border: 2px solid #0044cc;
 }
 
 .profile-header {
@@ -206,15 +205,15 @@ main {
     border-radius: 25%;
     object-fit: cover;
     cursor: pointer;
-    transition: border 0.3s;
-}
-
-.avatar-gallery img.selected {
-    border: 5px solid #0044cc;
+    transition: box-shadow 0.3s;
 }
 
 .avatar-gallery img:hover {
-    border: 5px solid #0044cc;
+    box-shadow: 0 0 10px rgb(0, 94, 255);
+}
+
+.avatar-gallery img.selected {
+    box-shadow: 0 0 10px rgb(0, 94, 255);
 }
 
 /* Стили для кнопки закрытия модального окна */
