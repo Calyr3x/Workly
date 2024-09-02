@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarGallery = document.getElementById('avatarGallery');
     const avatar = document.getElementById('avatar');
     const closeModal = document.querySelector('.close');
+    const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
     let selectedAvatarSrc = '';
 
@@ -28,12 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
             avatarModal.style.display = 'none';
 
             // Отправить выбранный аватар на сервер
-            await saveAvatar(selectedAvatarSrc);
+            await saveAvatar(selectedAvatarSrc, userId);
         }
     });
 
-    async function saveAvatar(avatarSrc) {
-        const response = await fetch('http://localhost:8080/updateAvatar', {
+    async function saveAvatar(avatarSrc, userId) {
+        const response = await fetch(`http://localhost:8080/updateAvatar?user_id=${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({
                 avatar: avatarSrc,
             }),
-            credentials: 'include', // Включаем отправку куки
         });
 
         if (response.ok) {
@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function loadCurrentAvatar() {
-        const response = await fetch('/getCurrentAvatar');
+    async function loadCurrentAvatar(userId) {
+        const response = await fetch(`http://localhost:8080/getCurrentAvatar?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
             if (data.avatar) {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Загрузить текущий аватар при загрузке страницы
-    loadCurrentAvatar();
+    loadCurrentAvatar(userId);
 
     // Заглушка для уведомлений
     const notificationList = document.getElementById('notificationList');

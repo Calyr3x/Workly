@@ -74,12 +74,16 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:  "user_id",
-		Value: userID.String(),
-		Path:  "/",
-	})
-
+	// Ебашим куки при успешной авторизации, хранятся  день
+	// Правда вывести их нельзя, хотя в браузере они установлены, хз что за хуйня
+	/*
+		http.SetCookie(w, &http.Cookie{
+			Name:   "user_id",
+			Value:  userID.String(),
+			Path:   "/",
+			MaxAge: 86400,
+		})
+	*/
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"user_id": userID.String()})
 }
@@ -125,20 +129,25 @@ func handleUpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получить ID пользователя из куки
-	cookie, err := r.Cookie("user_id")
-	if err != nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-		return
-	}
+	/*
+		cookie, err := r.Cookie("user_id")
+		log.Println(cookie)
+		if err != nil {
+			http.Error(w, "User not authenticated", http.StatusUnauthorized)
+			return
+		}
 
-	userID, err := uuid.Parse(cookie.Value)
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusUnauthorized)
-		return
-	}
+		userID, err := uuid.Parse(cookie.Value)
+		if err != nil {
+			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
+			return
+		}
+	*/
 
+	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
+	log.Println(userID)
 	// Обновить профиль в базе данных
-	_, err = db.Exec("UPDATE users SET avatar = $1 WHERE id = $2", profileUpdate.Avatar, userID)
+	_, err := db.Exec("UPDATE users SET avatar = $1 WHERE id = $2", profileUpdate.Avatar, userID)
 	if err != nil {
 		http.Error(w, "Failed to update avatar", http.StatusInternalServerError)
 		return
@@ -155,20 +164,23 @@ func handleGetCurrentAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Получить ID пользователя из куки
-	cookie, err := r.Cookie("user_id")
-	if err != nil {
-		http.Error(w, "User not authenticated", http.StatusUnauthorized)
-		return
-	}
+	/*
+		cookie, err := r.Cookie("user_id")
+		if err != nil {
+			http.Error(w, "User not authenticated", http.StatusUnauthorized)
+			return
+		}
 
-	userID, err := uuid.Parse(cookie.Value)
-	if err != nil {
-		http.Error(w, "Invalid user ID", http.StatusUnauthorized)
-		return
-	}
+		userID, err := uuid.Parse(cookie.Value)
 
+		if err != nil {
+			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
+			return
+		}
+	*/
+	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
 	var avatar string
-	err = db.QueryRow("SELECT avatar FROM users WHERE id = $1", userID).Scan(&avatar)
+	err := db.QueryRow("SELECT avatar FROM users WHERE id = $1", userID).Scan(&avatar)
 	if err != nil {
 		http.Error(w, "Failed to get avatar", http.StatusInternalServerError)
 		return
