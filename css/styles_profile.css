@@ -205,14 +205,16 @@ main {
     border-radius: 25%;
     object-fit: cover;
     cursor: pointer;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s transform 0.9s;
 }
 
 .avatar-gallery img:hover {
+    transform: scale(1.1);
     box-shadow: 0 0 10px rgb(0, 94, 255);
 }
 
 .avatar-gallery img.selected {
+    transform: scale(1.1);
     box-shadow: 0 0 10px rgb(0, 94, 255);
 }
 
