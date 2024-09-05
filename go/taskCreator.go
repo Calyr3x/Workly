@@ -96,7 +96,7 @@ func handleCreateTask(w http.ResponseWriter, r *http.Request) {
 	var task struct {
 		Name        string      `json:"name"`
 		Description string      `json:"description"`
-		Deadline    string      `json:"deadline"` // Принимаем как строку
+		Deadline    string      `json:"deadline"`
 		CreatorID   uuid.UUID   `json:"creator_id"`
 		UserIDs     []uuid.UUID `json:"user_ids"`
 	}

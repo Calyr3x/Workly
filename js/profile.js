@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAvatarButton = document.getElementById('selectAvatarButton');
     const avatarGallery = document.getElementById('avatarGallery');
     const avatar = document.getElementById('avatar');
+    const username = document.getElementById('username');
     const closeModal = document.querySelector('.close');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
@@ -110,8 +111,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function getUsername(userId) {
+        const response = await fetch(`http://localhost:8080/getUsername?user_id=${userId}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.username) {
+                username.value = data.username;
+            }
+        }
+    }
+
     // Загрузить текущий аватар при загрузке страницы
     loadCurrentAvatar(userId);
+    getUsername(userId);
 
     // Заглушка для уведомлений
     const notificationList = document.getElementById('notificationList');

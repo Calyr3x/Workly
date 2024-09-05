@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskDescription').value = task.description;
             document.getElementById('taskDeadline').value = new Date(task.deadline).toISOString().split('T')[0];
-            document.getElementById('taskUsers').value = ''; // Присвойте email пользователей сюда, если есть
+            document.getElementById('taskUsers').value = ''; // Пока добавление пользователей не реализовано
             editingTaskID = task.id;
             document.getElementById('modalTitle').innerText = 'Редактировать задачу';
         } else {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('taskName').value;
         const description = document.getElementById('taskDescription').value;
         const deadlineDate = new Date(document.getElementById('taskDeadline').value);
-        const deadlineIso = deadlineDate.toISOString(); // Преобразуем дату в формат ISO
+        const deadlineIso = deadlineDate.toISOString();
         const userEmails = document.getElementById('taskUsers').value.split(',').map(email => email.trim()).filter(email => email);
 
         try {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         name,
                         description,
                         deadline: deadlineIso,
-                        user_ids: userEmails // Преобразуйте email в user_id на сервере
+                        user_ids: userEmails
                     })
                 });
             } else {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         description,
                         deadline: deadlineIso,
                         creator_id: userId,
-                        user_ids: userEmails // Преобразуйте email в user_id на сервере
+                        user_ids: userEmails
                     })
                 });
             }
@@ -123,8 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
         }
     }
-
-
 
     // Функция для получения задач с сервера
     async function fetchTasks(userId) {
@@ -166,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
 
-
                 document.querySelectorAll('.delete-btn').forEach(button => {
                     button.addEventListener('click', (event) => {
                         const taskID = event.target.dataset.id;
@@ -182,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
         }
     }
-
 
     // Получаем задачи при загрузке страницы
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");

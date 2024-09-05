@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                // Parse response to get user ID
+                // Получаем user_id из ответа сервера
                 const data = await response.json();
                 const userId = data.user_id;
 
-                // Set user_id cookie
+                // Усттанавливаем куки
                 document.cookie = `user_id=${userId}; path=/;`;
 
                 // Успешный вход, перенаправляем на главную страницу
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.classList.add('shake-animation');
                 form.style.borderColor = 'red';
 
-                // Убираем анимацию и восстанавливаем цвет границы через 1 секунду
+                // Убираем анимацию и восстанавливаем цвет границы через 2 секунды
                 setTimeout(() => {
                     form.classList.remove('shake-animation');
                     form.style.borderColor = ''; // Вернуть к исходному цвету

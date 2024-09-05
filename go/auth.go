@@ -29,6 +29,7 @@ func main() {
 	http.HandleFunc("/register", withCORS(handleRegister))
 	http.HandleFunc("/updateAvatar", withCORS(handleUpdateAvatar))
 	http.HandleFunc("/getCurrentAvatar", withCORS(handleGetCurrentAvatar))
+	http.HandleFunc("/getUsername", withCORS(handleGetUsername))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -50,7 +51,7 @@ func withCORS(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// Обработчик для входа в систему
+// Обработчик входа в систему
 func handleLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -61,6 +62,7 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
@@ -74,31 +76,22 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Ебашим куки при успешной авторизации, хранятся  день
-	// Правда вывести их нельзя, хотя в браузере они установлены, хз что за хуйня
-	/*
-		http.SetCookie(w, &http.Cookie{
-			Name:   "user_id",
-			Value:  userID.String(),
-			Path:   "/",
-			MaxAge: 86400,
-		})
-	*/
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"user_id": userID.String()})
 }
 
+// Обработка регситрации пользователя
 func handleRegister(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-
 	var user struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 		Username string `json: "username"`
 	}
+
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
@@ -128,22 +121,6 @@ func handleUpdateAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Получить ID пользователя из куки
-	/*
-		cookie, err := r.Cookie("user_id")
-		log.Println(cookie)
-		if err != nil {
-			http.Error(w, "User not authenticated", http.StatusUnauthorized)
-			return
-		}
-
-		userID, err := uuid.Parse(cookie.Value)
-		if err != nil {
-			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
-			return
-		}
-	*/
-
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
 	log.Println(userID)
 	// Обновить профиль в базе данных
@@ -163,21 +140,6 @@ func handleGetCurrentAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Получить ID пользователя из куки
-	/*
-		cookie, err := r.Cookie("user_id")
-		if err != nil {
-			http.Error(w, "User not authenticated", http.StatusUnauthorized)
-			return
-		}
-
-		userID, err := uuid.Parse(cookie.Value)
-
-		if err != nil {
-			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
-			return
-		}
-	*/
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
 	var avatar string
 	err := db.QueryRow("SELECT avatar FROM users WHERE id = $1", userID).Scan(&avatar)
@@ -189,4 +151,24 @@ func handleGetCurrentAvatar(w http.ResponseWriter, r *http.Request) {
 	// Отправить текущий аватар пользователю
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"avatar": avatar})
+}
+
+// Получение юзернейма
+func handleGetUsername(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
+	var username string
+	err := db.QueryRow("SELECT username FROM users WHERE id = $1", userID).Scan(&username)
+	if err != nil {
+		http.Error(w, "Failed to get username", http.StatusInternalServerError)
+		return
+	}
+
+	// Отправить текущий юзернейм пользователю
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"username": username})
 }

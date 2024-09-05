@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                // Показываем улучшенную анимацию успешной регистрации с затемнением фона
+                // Показываем анимацию успешной регистрации с затемнением фона
                 showSuccessMessage();
             } else {
                 alert('Registration failed');
@@ -59,11 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         successMessage.classList.add('show');
         overlay.classList.add('show');
 
-        // Скрыть сообщение и сделать редирект через 2 секунды
+        // Скрыть сообщение и сделать редирект через 3 секунды
         setTimeout(() => {
             successMessage.classList.remove('show');
             overlay.classList.remove('show');
             window.location.href = 'login.html';
-        }, 4000); // Время анимации + задержка перед редиректом
+        }, 3000);
     }
 });
