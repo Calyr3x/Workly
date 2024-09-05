@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAvatarButton = document.getElementById('selectAvatarButton');
     const avatarGallery = document.getElementById('avatarGallery');
     const avatar = document.getElementById('avatar');
-    const username = document.getElementById('username');
+    const usernameInput = document.getElementById('usernameInput');
+    const emailInput = document.getElementById('emailInput');
     const closeModal = document.querySelector('.close');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
@@ -52,29 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
     function loadAvatars() {
         const avatars = [
-            '1.png',
-            '2.png',
-            '3.png',
-            '4.png',
-            '5.png',
-            '6.png',
-            '7.png',
-            '8.png',
-            '9.png',
-            '10.png',
-            '11.png',
-            '12.png',
-            '13.png',
-            '14.png',
-            '15.png',
-            '16.png',
-            '17.png',
-            '18.png',
-            '19.png',
-            '20.png'
+            '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png', '8.png', '9.png', '10.png',
+            '11.png', '12.png', '13.png', '14.png', '15.png', '16.png', '17.png', '18.png', '19.png', '20.png'
         ];
 
         avatarGallery.innerHTML = '';
@@ -99,31 +81,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.avatar) {
                 avatar.src = data.avatar;
             } else {
-                // Если нет сохраненного аватара, установим случайный
                 const defaultAvatars = [
-                    '/imgs/profileIcons/1.png',
-                    '/imgs/profileIcons/2.png',
-                    '/imgs/profileIcons/3.png',
-                    '/imgs/profileIcons/4.png'
+                    '/imgs/profileIcons/1.png', '/imgs/profileIcons/2.png', '/imgs/profileIcons/3.png', '/imgs/profileIcons/4.png'
                 ];
                 avatar.src = defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
             }
         }
     }
 
-    async function getUsername(userId) {
-        const response = await fetch(`http://localhost:8080/getUsername?user_id=${userId}`);
+    async function getUserData(userId) {
+        const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
             if (data.username) {
-                username.value = data.username;
+                usernameInput.value = data.username;
+            }
+            if (data.email) {
+                emailInput.value = data.email;
             }
         }
     }
 
-    // Загрузить текущий аватар при загрузке страницы
+    // Загрузить текущий аватар и данные пользователя при загрузке страницы
     loadCurrentAvatar(userId);
-    getUsername(userId);
+    getUserData(userId);
 
     // Заглушка для уведомлений
     const notificationList = document.getElementById('notificationList');

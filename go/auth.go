@@ -29,7 +29,7 @@ func main() {
 	http.HandleFunc("/register", withCORS(handleRegister))
 	http.HandleFunc("/updateAvatar", withCORS(handleUpdateAvatar))
 	http.HandleFunc("/getCurrentAvatar", withCORS(handleGetCurrentAvatar))
-	http.HandleFunc("/getUsername", withCORS(handleGetUsername))
+	http.HandleFunc("/getUserData", withCORS(handleGetUserData))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -154,21 +154,31 @@ func handleGetCurrentAvatar(w http.ResponseWriter, r *http.Request) {
 }
 
 // Получение юзернейма
-func handleGetUsername(w http.ResponseWriter, r *http.Request) {
+func handleGetUserData(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
+	var userData struct {
+		Username string `json:"username"`
+		Email    string `json:"email"`
+	}
+
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-	var username string
-	err := db.QueryRow("SELECT username FROM users WHERE id = $1", userID).Scan(&username)
+
+	err := db.QueryRow("SELECT username FROM users WHERE id = $1", userID).Scan(&userData.Username)
 	if err != nil {
 		http.Error(w, "Failed to get username", http.StatusInternalServerError)
 		return
 	}
 
+	err = db.QueryRow("SELECT email FROM users WHERE id = $1", userID).Scan(&userData.Email)
+	if err != nil {
+		http.Error(w, "Failed to get email", http.StatusInternalServerError)
+		return
+	}
 	// Отправить текущий юзернейм пользователю
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"username": username})
+	json.NewEncoder(w).Encode(userData)
 }
