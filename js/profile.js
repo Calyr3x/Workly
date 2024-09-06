@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectAvatarButton = document.getElementById('selectAvatarButton');
     const avatarGallery = document.getElementById('avatarGallery');
     const avatar = document.getElementById('avatar');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    const emailDisplay = document.getElementById('emailDisplay');
     const usernameInput = document.getElementById('usernameInput');
-    const emailInput = document.getElementById('emailInput');
-    const closeModal = document.querySelector('.close');
+    const editUsernameButton = document.getElementById('editUsernameButton');
+    const profileForm = document.getElementById('profileForm');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
     let selectedAvatarSrc = '';
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Закрыть модальное окно
+    const closeModal = document.querySelector('.close');
     closeModal.addEventListener('click', () => {
         avatarModal.style.display = 'none';
     });
@@ -47,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
-            alert('Аватар обновлен успешно.');
+            console.log('Аватар обновлен успешно.');
         } else {
-            alert('Ошибка при обновлении аватара.');
+            console.log('Ошибка при обновлении аватара.');
         }
     }
 
@@ -94,13 +97,49 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok) {
             const data = await response.json();
             if (data.username) {
+                usernameDisplay.textContent = data.username;
                 usernameInput.value = data.username;
             }
             if (data.email) {
-                emailInput.value = data.email;
+                emailDisplay.textContent = data.email;
             }
         }
     }
+
+    // Редактировать имя пользователя
+    editUsernameButton.addEventListener('click', () => {
+        usernameDisplay.classList.add('hidden');
+        editUsernameButton.classList.add('hidden');
+        usernameInput.classList.remove('hidden');
+        usernameInput.focus();
+    });
+
+    // Сохранение изменений профиля
+    profileForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const newUsername = usernameInput.value;
+
+        const response = await fetch(`http://localhost:8080/updateUsername?user_id=${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: newUsername,
+            }),
+        });
+
+        if (response.ok) {
+            console.log('Имя пользователя обновлено успешно.');
+            usernameDisplay.textContent = newUsername;
+            usernameDisplay.classList.remove('hidden');
+            editUsernameButton.classList.remove('hidden');
+            usernameInput.classList.add('hidden');
+        } else {
+            console.log('Ошибка при обновлении имени пользователя.');
+        }
+    });
 
     // Загрузить текущий аватар и данные пользователя при загрузке страницы
     loadCurrentAvatar(userId);

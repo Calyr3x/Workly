@@ -36,12 +36,12 @@
                 <div class="profile-info">
                     <form id="profileForm">
                         <div class="form-group">
-                            <label for="usernameInput">Имя пользователя:</label>
-                            <input type="text" id="usernameInput" class="form-control" required>
+                            <span id="usernameDisplay" class="profile-text"></span>
+                            <button type="button" id="editUsernameButton" class="edit-icon">✎</button>
+                            <input type="text" id="usernameInput" class="form-control hidden" required>
                         </div>
                         <div class="form-group">
-                            <label for="emailInput">Электронная почта:</label>
-                            <input type="email" id="emailInput" class="form-control" required>
+                            <span id="emailDisplay" class="profile-text"></span>
                         </div>
                         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
                     </form>

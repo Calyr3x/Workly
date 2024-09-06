@@ -30,6 +30,7 @@ func main() {
 	http.HandleFunc("/updateAvatar", withCORS(handleUpdateAvatar))
 	http.HandleFunc("/getCurrentAvatar", withCORS(handleGetCurrentAvatar))
 	http.HandleFunc("/getUserData", withCORS(handleGetUserData))
+	http.HandleFunc("/updateUsername", withCORS(handleUpdateUsername))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -122,7 +123,6 @@ func handleUpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-	log.Println(userID)
 	// Обновить профиль в базе данных
 	_, err := db.Exec("UPDATE users SET avatar = $1 WHERE id = $2", profileUpdate.Avatar, userID)
 	if err != nil {
@@ -131,6 +131,30 @@ func handleUpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// Обработчик для обновления имени пользователя
+func handleUpdateUsername(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var profileUpdate struct {
+		NewUsername string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&profileUpdate); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
+
+	_, err := db.Exec("UPDATE users SET username = $1 WHERE id = $2", profileUpdate.NewUsername, userID)
+	if err != nil {
+		http.Error(w, "Failed to update username", http.StatusInternalServerError)
+		return
+	}
 }
 
 // Обработчик для получения текущего аватара пользователя

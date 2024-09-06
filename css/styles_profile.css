@@ -229,3 +229,25 @@ main {
 .close:hover {
     color: #000;
 }
+
+.hidden {
+    display: none;
+}
+
+.profile-text {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.edit-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-left: 10px;
+    color: #007bff;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
