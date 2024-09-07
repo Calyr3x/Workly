@@ -1,3 +1,4 @@
+// Обработка входа и регистрации пользователя
 package main
 
 import (
@@ -27,10 +28,6 @@ func main() {
 
 	http.HandleFunc("/login", withCORS(handleLogin))
 	http.HandleFunc("/register", withCORS(handleRegister))
-	http.HandleFunc("/updateAvatar", withCORS(handleUpdateAvatar))
-	http.HandleFunc("/getCurrentAvatar", withCORS(handleGetCurrentAvatar))
-	http.HandleFunc("/getUserData", withCORS(handleGetUserData))
-	http.HandleFunc("/updateUsername", withCORS(handleUpdateUsername))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -105,104 +102,4 @@ func handleRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-}
-
-// Обработчик для обновления аватара пользователя
-func handleUpdateAvatar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var profileUpdate struct {
-		Avatar string `json:"avatar"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&profileUpdate); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
-
-	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-	// Обновить профиль в базе данных
-	_, err := db.Exec("UPDATE users SET avatar = $1 WHERE id = $2", profileUpdate.Avatar, userID)
-	if err != nil {
-		http.Error(w, "Failed to update avatar", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-}
-
-// Обработчик для обновления имени пользователя
-func handleUpdateUsername(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var profileUpdate struct {
-		NewUsername string `json:"username"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&profileUpdate); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
-
-	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-
-	_, err := db.Exec("UPDATE users SET username = $1 WHERE id = $2", profileUpdate.NewUsername, userID)
-	if err != nil {
-		http.Error(w, "Failed to update username", http.StatusInternalServerError)
-		return
-	}
-}
-
-// Обработчик для получения текущего аватара пользователя
-func handleGetCurrentAvatar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
-
-	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-	var avatar string
-	err := db.QueryRow("SELECT avatar FROM users WHERE id = $1", userID).Scan(&avatar)
-	if err != nil {
-		http.Error(w, "Failed to get avatar", http.StatusInternalServerError)
-		return
-	}
-
-	// Отправить текущий аватар пользователю
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"avatar": avatar})
-}
-
-// Получение юзернейма
-func handleGetUserData(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var userData struct {
-		Username string `json:"username"`
-		Email    string `json:"email"`
-	}
-
-	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
-
-	err := db.QueryRow("SELECT username FROM users WHERE id = $1", userID).Scan(&userData.Username)
-	if err != nil {
-		http.Error(w, "Failed to get username", http.StatusInternalServerError)
-		return
-	}
-
-	err = db.QueryRow("SELECT email FROM users WHERE id = $1", userID).Scan(&userData.Email)
-	if err != nil {
-		http.Error(w, "Failed to get email", http.StatusInternalServerError)
-		return
-	}
-	// Отправить текущий юзернейм пользователю
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userData)
 }
