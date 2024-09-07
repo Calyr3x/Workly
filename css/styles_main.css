@@ -300,3 +300,124 @@ main {
     transform: scale(1.05);
     color: #0055ff;
 }
+
+/* Обновленные стили для модального окна просмотра задачи */
+.modal-content {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    max-width: 600px;
+    margin: 10% auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content h2 {
+    margin: 0 0 20px;
+    border-bottom: 2px solid #f0f0f0;
+    font-size: 1.5rem;
+    color: #0044cc;
+    text-align: center;
+}
+
+.task-details {
+    margin-top: 20px;
+}
+
+.task-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.task-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-detail i.icon {
+    font-size: 24px;
+    color: #0044cc;
+}
+
+.task-detail p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.task-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-secondary {
+    background-color: #0066cc;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #005bb5;
+}
+
+.btn-danger {
+    background-color: #cc0000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #b30000;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Стили для прогресс-бара */
+.progress-bar-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4caf50;
+    width: 0;
+    /* Начальная ширина прогресс-бара */
+    transition: width 0.4s ease;
+    /* Анимация изменения ширины */
+}
+
+#timeRemainingText {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}

@@ -1,22 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const addTaskButton = document.getElementById('addTaskButton');
     const taskModal = document.getElementById('taskModal');
-    const closeModalButton = document.querySelector('.modal .close');
+    const taskViewModal = document.getElementById('taskViewModal');
+    const closeModalButtons = document.querySelectorAll('.modal .close');
     const taskList = document.getElementById('taskList');
     let editingTaskID = null;
 
-    // Функция для открытия модального окна
+    // Функция для открытия модального окна создания/редактирования задачи
     const openModal = (task = null) => {
         if (task) {
-            // Заполняем форму данными задачи для редактирования
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskDescription').value = task.description;
             document.getElementById('taskDeadline').value = new Date(task.deadline).toISOString().split('T')[0];
-            document.getElementById('taskUsers').value = ''; // Пока добавление пользователей не реализовано
+            document.getElementById('taskUsers').value = '';
             editingTaskID = task.id;
             document.getElementById('modalTitle').innerText = 'Редактировать задачу';
         } else {
-            // Очищаем форму для новой задачи
             document.getElementById('taskName').value = '';
             document.getElementById('taskDescription').value = '';
             document.getElementById('taskDeadline').value = '';
@@ -27,25 +26,78 @@ document.addEventListener('DOMContentLoaded', () => {
         taskModal.style.display = 'block';
     };
 
-    // Функция для закрытия модального окна
-    const closeModal = () => {
-        taskModal.style.display = 'none';
+    // Функция для открытия окна просмотра задачи
+    const openTaskViewModal = (task) => {
+        const deadline = new Date(task.deadline);
+        const now = new Date();
+
+        document.getElementById('viewTaskTitle').textContent = task.name;
+        document.getElementById('viewTaskDescription').textContent = task.description;
+        document.getElementById('viewTaskDeadline').querySelector('span').textContent = deadline.toLocaleDateString();
+
+        // Обработчик кнопки "Редактировать"
+        document.getElementById('editTaskButton').onclick = () => {
+            closeModal();  // Закрываем окно просмотра перед открытием окна редактирования
+            openModal(task);  // Открываем окно редактирования
+        };
+
+        // Обработчик кнопки "Удалить"
+        document.getElementById('deleteTaskButton').onclick = () => {
+            if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
+                deleteTask(task.id);
+                closeModal();
+            }
+        };
+
+        // Логика для расчета времени до дедлайна и обновления прогресс-бара
+        updateTimeRemaining(deadline, now);
+
+        taskViewModal.style.display = 'block';
     };
 
-    // Открытие модального окна при нажатии на кнопку
-    addTaskButton.addEventListener('click', () => openModal());
+    // Функция для расчета и отображения оставшегося времени до дедлайна
+    function updateTimeRemaining(deadline, now) {
+        const totalDuration = deadline - now; // Общее время до дедлайна в миллисекундах
+        const timeRemaining = Math.max(0, deadline - now); // Оставшееся время до дедлайна в миллисекундах
 
-    // Закрытие модального окна при нажатии на крестик
-    closeModalButton.addEventListener('click', closeModal);
+        const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const timeText = `${daysRemaining}д ${hoursRemaining}ч ${minutesRemaining}м`;
 
-    // Закрытие модального окна при клике за его пределами
+        // Обновление текста
+        document.getElementById('timeRemainingValue').textContent = timeText;
+
+        // Обновление прогресс-бара
+        const progressBar = document.getElementById('progressBar');
+        const progressPercentage = Math.max(0, Math.min(100, (1 - timeRemaining / totalDuration) * 100));
+        progressBar.style.width = `${progressPercentage}%`;
+
+        // Обновление оставшегося времени каждую минуту
+        setTimeout(() => updateTimeRemaining(deadline, new Date()), 60000);
+    }
+
+
+    // Функция для закрытия модальных окон
+    const closeModal = () => {
+        taskModal.style.display = 'none';
+        taskViewModal.style.display = 'none';
+    };
+
+    // Закрытие окон при нажатии на крестик
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', closeModal);
+    });
+
+    // Закрытие окон при клике вне модального окна
     window.addEventListener('click', (event) => {
-        if (event.target === taskModal) {
+        if (event.target === taskModal || event.target === taskViewModal) {
             closeModal();
         }
     });
 
-    // Отправка данных задачи на сервер и обновление списка задач
+    addTaskButton.addEventListener('click', () => openModal());
+
     const taskForm = document.getElementById('taskForm');
     taskForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -61,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let response;
             if (editingTaskID) {
-                // Редактирование существующей задачи
                 response = await fetch(`http://localhost:8081/tasks/update`, {
                     method: 'PUT',
                     headers: {
@@ -76,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
             } else {
-                // Создание новой задачи
                 response = await fetch('http://localhost:8081/tasks/create', {
                     method: 'POST',
                     headers: {
@@ -124,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Функция для получения задач с сервера
     async function fetchTasks(userId) {
         try {
             const response = await fetch(`http://localhost:8081/tasks?user_id=${userId}`);
@@ -138,39 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3>${task.name}</h3>
                         <p>${task.description}</p>
                         <span>Дедлайн: ${new Date(task.deadline).toLocaleDateString()}</span>
-                        <div class="task-actions">
-                            <button class="edit-btn" data-id="${task.id}">Редактировать</button>
-                            <button class="delete-btn" data-id="${task.id}">Удалить</button>
-                        </div>
                     `;
+                    li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
-                });
-
-                document.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const taskID = event.target.dataset.id;
-                        fetch(`http://localhost:8081/tasks/${taskID}`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(task => openModal(task))
-                            .catch(error => {
-                                console.error('Error fetching task:', error);
-                                alert('Ошибка при загрузке задачи для редактирования');
-                            });
-                    });
-                });
-
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const taskID = event.target.dataset.id;
-                        if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
-                            deleteTask(taskID);
-                        }
-                    });
                 });
             } else {
                 alert('Ошибка получения задач');
@@ -180,7 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Получаем задачи при загрузке страницы
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     if (userId) {
         fetchTasks(userId);

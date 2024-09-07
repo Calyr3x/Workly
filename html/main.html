@@ -70,6 +70,39 @@
         </div>
     </div>
 
+    <!-- Модальное окно для просмотра задачи -->
+    <div id="taskViewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="viewTaskTitle">Название задачи</h2>
+            <div class="task-details">
+                <div class="task-info">
+                    <div class="task-detail">
+                        <i class="icon material-symbols-outlined">description</i>
+                        <p id="viewTaskDescription">Описание задачи</p>
+                    </div>
+                    <div class="task-detail">
+                        <i class="icon material-symbols-outlined">event</i>
+                        <p id="viewTaskDeadline">Дедлайн: <span></span></p>
+                    </div>
+                    <div class="task-detail">
+                        <i class="icon material-symbols-outlined">timer</i>
+                        <p id="timeRemainingText">Осталось времени: <span id="timeRemainingValue"></span></p>
+                        <div class="progress-bar-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="task-actions">
+                <button id="editTaskButton" class="btn btn-secondary">Редактировать</button>
+                <button id="deleteTaskButton" class="btn btn-danger">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+
+
     <script src="/js/create_task.js"></script>
 </body>
 
