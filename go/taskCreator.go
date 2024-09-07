@@ -62,10 +62,10 @@ func handleTasks(w http.ResponseWriter, r *http.Request) {
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
 
 	rows, err := db.Query(`
-        SELECT t.id, t.name, t.description, t.deadline 
-        FROM tasks t 
-        INNER JOIN task_access ta ON t.id = ta.task_id 
-        WHERE ta.user_id = $1`, userID)
+	SELECT t.id, t.name, t.description, t.deadline, t.created_at 
+	FROM tasks t 
+	INNER JOIN task_access ta ON t.id = ta.task_id 
+	WHERE ta.user_id = $1`, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -75,7 +75,7 @@ func handleTasks(w http.ResponseWriter, r *http.Request) {
 	var tasks []Task
 	for rows.Next() {
 		var task Task
-		if err := rows.Scan(&task.ID, &task.Name, &task.Description, &task.Deadline); err != nil {
+		if err := rows.Scan(&task.ID, &task.Name, &task.Description, &task.Deadline, &task.CreatedAt); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -149,6 +149,7 @@ type Task struct {
 	ID          uuid.UUID   `json:"id"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
+	CreatedAt   time.Time   `json:"created_at"`
 	Deadline    time.Time   `json:"deadline"`
 	CreatorID   uuid.UUID   `json:"creator_id"`
 	UserIDs     []uuid.UUID `json:"user_ids"`
@@ -245,9 +246,9 @@ func handleGetTaskByID(w http.ResponseWriter, r *http.Request) {
 
 	var task Task
 	err := db.QueryRow(`
-        SELECT id, name, description, deadline, creator_id
-        FROM tasks
-        WHERE id = $1`, taskID).Scan(&task.ID, &task.Name, &task.Description, &task.Deadline, &task.CreatorID)
+	SELECT id, name, description, deadline, created_at, creator_id
+	FROM tasks
+	WHERE id = $1`, taskID).Scan(&task.ID, &task.Name, &task.Description, &task.Deadline, &task.CreatedAt, &task.CreatorID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "Task not found", http.StatusNotFound)

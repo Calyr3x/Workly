@@ -397,24 +397,22 @@ main {
     color: #333;
 }
 
-/* Стили для прогресс-бара */
 .progress-bar-container {
     width: 100%;
-    background-color: #f3f3f3;
-    border-radius: 5px;
-    margin-top: 10px;
-    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
     overflow: hidden;
 }
 
 .progress-bar {
-    height: 100%;
-    background-color: #4caf50;
-    width: 0;
-    /* Начальная ширина прогресс-бара */
-    transition: width 0.4s ease;
-    /* Анимация изменения ширины */
+    height: 20px;
+    background-color: #76c7c0;
+    /* Цвет прогресс-бара */
+    width: 0%;
+    /* Начальная ширина */
+    transition: width 0.5s ease-in-out;
 }
+
 
 #timeRemainingText {
     margin-top: 10px;

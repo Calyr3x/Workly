@@ -26,9 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
         taskModal.style.display = 'block';
     };
 
+    //Преобразование времени в локальное
+    function convertToLocalTime(dateString) {
+        const utcDate = new Date(dateString);
+        return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
+    }
+
     // Функция для открытия окна просмотра задачи
     const openTaskViewModal = (task) => {
-        const deadline = new Date(task.deadline);
+        const deadline = convertToLocalTime(task.deadline);
+        const createdAt = convertToLocalTime(task.created_at);
         const now = new Date();
 
         document.getElementById('viewTaskTitle').textContent = task.name;
@@ -50,14 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Логика для расчета времени до дедлайна и обновления прогресс-бара
-        updateTimeRemaining(deadline, now);
+        updateTimeRemaining(deadline, createdAt, now);
 
         taskViewModal.style.display = 'block';
     };
 
     // Функция для расчета и отображения оставшегося времени до дедлайна
-    function updateTimeRemaining(deadline, now) {
-        const totalDuration = deadline - now; // Общее время до дедлайна в миллисекундах
+    function updateTimeRemaining(deadline, createdAt, now) {
+        const totalDuration = deadline - createdAt; // Общее время от создания до дедлайна в миллисекундах
+        const timePassed = now - createdAt; // Прошедшее время от создания до текущего момента
         const timeRemaining = Math.max(0, deadline - now); // Оставшееся время до дедлайна в миллисекундах
 
         const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
@@ -70,13 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Обновление прогресс-бара
         const progressBar = document.getElementById('progressBar');
-        const progressPercentage = Math.max(0, Math.min(100, (1 - timeRemaining / totalDuration) * 100));
+        const progressPercentage = Math.max(0, Math.min(100, (timePassed / totalDuration) * 100));
         progressBar.style.width = `${progressPercentage}%`;
 
         // Обновление оставшегося времени каждую минуту
-        setTimeout(() => updateTimeRemaining(deadline, new Date()), 60000);
+        setTimeout(() => updateTimeRemaining(deadline, createdAt, new Date()), 60000);
     }
-
 
     // Функция для закрытия модальных окон
     const closeModal = () => {
