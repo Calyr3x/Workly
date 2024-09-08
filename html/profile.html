@@ -56,14 +56,7 @@
             </div>
 
             <div class="team-creation">
-                <h2>Создание команды</h2>
-                <form id="teamForm">
-                    <div class="form-group">
-                        <label for="teamName">Название команды:</label>
-                        <input type="text" id="teamName" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Создать команду</button>
-                </form>
+                <button type="submit" class="btn btn-primary" id="createTeamButton">Создать команду</button>
             </div>
         </section>
     </main>
@@ -80,7 +73,45 @@
         </div>
     </div>
 
+    <!-- Модальное окно для создания команды -->
+    <div id="createTeamModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Создание команды</h2>
+            <form id="createTeamForm">
+                <div class="form-group">
+                    <label for="teamName">Название команды:</label>
+                    <input type="text" id="teamName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamMembers">Добавить участников:</label>
+                    <input type="text" id="teamMemberInput" class="form-control" placeholder="Введите юзернейм">
+                    <button type="button" id="addMemberButton" class="btn btn-secondary">Добавить</button>
+                </div>
+                <ul id="teamMembersList" class="members-list">
+                    <!-- Список участников будет добавляться динамически -->
+                </ul>
+                <button type="submit" class="btn btn-primary">Создать команду</button>
+                <p class="error-message" id="errorMessage"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для успешного создания команды -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Команда создана!</h2>
+            <p id="successMessage"></p>
+            <ul id="successMembersList" class="members-list">
+                <!-- Участники будут добавляться динамически -->
+            </ul>
+            <button id="closeSuccessButton" class="btn btn-primary">Закрыть</button>
+        </div>
+    </div>
+
     <script src="/js/profile.js"></script>
+    <script src="/js/teams.js"></script>
 </body>
 
 </html>

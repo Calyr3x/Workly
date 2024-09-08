@@ -251,3 +251,171 @@ main {
 .edit-icon:hover {
     color: #0056b3;
 }
+
+/* Основные стили для модального окна создания команды */
+#createTeamModal .modal-content {
+    max-width: 750px;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок модального окна */
+#createTeamModal h2 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: #0044cc;
+    font-weight: bold;
+}
+
+/* Форма и элементы */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+#teamName,
+#teamMemberInput {
+    margin-bottom: 1rem;
+}
+
+#teamName {
+    width: calc(100% - 22px);
+    /* Подстраивает ширину для padding */
+}
+
+#teamMemberInput {
+    width: calc(100% - 22px);
+}
+
+#addMemberButton {
+    margin-top: 0.5rem;
+}
+
+/* Список участников */
+.members-list {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0;
+}
+
+.members-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.members-list li:last-child {
+    border-bottom: none;
+}
+
+.members-list .avatar-thumbnail {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.members-list span {
+    flex-grow: 1;
+    font-size: 0.95rem;
+}
+
+/* Кнопки внутри модального окна */
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #ddd;
+    color: #000;
+}
+
+/* Сообщение об ошибке */
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Кнопка закрытия модального окна */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Стили для модального окна успешного создания команды */
+#successModal .modal-content {
+    padding: 20px;
+    max-width: 600px;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#successModal h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #0044cc;
+    font-weight: bold;
+}
+
+#successMessage {
+    margin-bottom: 1rem;
+}
+
+#successMembersList {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0;
+}
+
+#successMembersList li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#successMembersList li:last-child {
+    border-bottom: none;
+}
+
+#successMembersList .avatar-thumbnail {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+#successMembersList span {
+    flex-grow: 1;
+}
+
+#closeSuccessButton {
+    margin-top: 10px;
+}
