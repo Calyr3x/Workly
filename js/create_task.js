@@ -26,16 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
         taskModal.style.display = 'block';
     };
 
-    //Преобразование времени в локальное
-    function convertToLocalTime(dateString) {
-        const utcDate = new Date(dateString);
-        return new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000));
-    }
-
     // Функция для открытия окна просмотра задачи
     const openTaskViewModal = (task) => {
-        const deadline = convertToLocalTime(task.deadline);
-        const createdAt = convertToLocalTime(task.created_at);
+        const deadline = new Date(task.deadline);
+        const createdAt = new Date(task.created_at);
         const now = new Date();
 
         document.getElementById('viewTaskTitle').textContent = task.name;
@@ -71,7 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
         const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        const timeText = `${daysRemaining}д ${hoursRemaining}ч ${minutesRemaining}м`;
+
+        // Создаем массив частей времени, исключая нулевые значения
+        const timeParts = [];
+        if (daysRemaining > 0) timeParts.push(`${daysRemaining}д`);
+        if (hoursRemaining > 0) timeParts.push(`${hoursRemaining}ч`);
+        if (minutesRemaining > 0) timeParts.push(`${minutesRemaining}м`);
+
+        // Соединяем части в одну строку
+        const timeText = timeParts.join(' ');
 
         // Обновление текста
         document.getElementById('timeRemainingValue').textContent = timeText;
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Обновление оставшегося времени каждую минуту
         setTimeout(() => updateTimeRemaining(deadline, createdAt, new Date()), 60000);
     }
+
 
     // Функция для закрытия модальных окон
     const closeModal = () => {
@@ -193,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     li.innerHTML = `
                         <h3>${task.name}</h3>
                         <p>${task.description}</p>
-                        <span>Дедлайн: ${new Date(task.deadline).toLocaleDateString()}</span>
+                        <span>Дедлайн: ${new Date(task.deadline).toLocaleString()}</span>
                     `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
