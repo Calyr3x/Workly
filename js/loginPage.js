@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('#loginForm');
     const loginButton = document.querySelector('#loginButton');
     const registerButton = document.querySelector('#registerButton');
+    const loaderContainer = document.querySelector('.loader-container');
 
     if (!form || !loginButton || !registerButton) {
         console.error('Form or buttons not found');
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (event.submitter === loginButton) {
             // Handle login
+            loaderContainer.style.display = 'flex';
             await handleLogin(email, password);
         }
     });
@@ -37,10 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Усттанавливаем куки
                 document.cookie = `user_id=${userId}; path=/;`;
-
+                loaderContainer.style.display = 'none';
                 // Успешный вход, перенаправляем на главную страницу
                 window.location.href = 'main.html';
             } else {
+                loaderContainer.style.display = 'none';
                 // Неудачный вход
                 const form = document.querySelector('.card');
                 const errorMessage = document.querySelector('.error-message');

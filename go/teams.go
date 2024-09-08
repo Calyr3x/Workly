@@ -27,9 +27,6 @@ func main() {
 	}
 
 	http.HandleFunc("/createTeam", withCORS(handleCreateTeam))
-	http.HandleFunc("/getTeams", withCORS(handleGetTeams))
-	http.HandleFunc("/addMember", withCORS(handleAddMember))
-	http.HandleFunc("/deleteTeam", withCORS(handleDeleteTeam))
 	http.HandleFunc("/getUserAvatar", withCORS(handleGetUserAvatar))
 
 	log.Println("Server is running on http://localhost:8083")

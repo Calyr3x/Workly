@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskViewModal = document.getElementById('taskViewModal');
     const closeModalButtons = document.querySelectorAll('.modal .close');
     const taskList = document.getElementById('taskList');
+    const loaderContainer = document.querySelector('.loader-container');
     let editingTaskID = null;
 
     // Функция для открытия модального окна создания/редактирования задачи
@@ -188,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`http://localhost:8081/tasks?user_id=${userId}`);
             if (response.ok) {
+                loaderContainer.style.display = 'none';
                 const tasks = await response.json();
                 taskList.innerHTML = '';
                 tasks.forEach(task => {
@@ -202,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     taskList.appendChild(li);
                 });
             } else {
+                loaderContainer.style.display = 'none';
                 alert('Ошибка получения задач');
             }
         } catch (error) {
@@ -211,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     if (userId) {
+        loaderContainer.style.display = 'flex';
         fetchTasks(userId);
     }
 });
