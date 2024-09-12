@@ -218,18 +218,6 @@ main {
     box-shadow: 0 0 10px rgb(0, 94, 255);
 }
 
-/* Стили для кнопки закрытия модального окна */
-.close {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #aaa;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: #000;
-}
-
 .hidden {
     display: none;
 }
@@ -281,7 +269,6 @@ main {
 
 #teamName {
     width: calc(100% - 22px);
-    /* Подстраивает ширину для padding */
 }
 
 #teamMemberInput {

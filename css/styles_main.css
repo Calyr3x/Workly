@@ -19,11 +19,6 @@ header {
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-header.scrolled {
-    background: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .navbar {
     padding: 1rem 2rem;
     display: flex;
@@ -42,32 +37,6 @@ header.scrolled {
 .brand-text {
     font-size: 1.5rem;
     font-weight: bold;
-}
-
-.navbar-menu {
-    display: flex;
-}
-
-.navbar-nav {
-    display: flex;
-    list-style: none;
-}
-
-.nav-item {
-    margin-left: 1rem;
-}
-
-.nav-link {
-    color: #0044cc;
-    font-weight: bold;
-    transition: color 0.3s;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-}
-
-.nav-link:hover {
-    color: #0066ff;
 }
 
 /* Отступ для основного контента, чтобы не перекрывался хедером */
@@ -115,7 +84,6 @@ main {
 /* Стили для основного контента */
 .task-section {
     margin-top: 1rem;
-    /* Отступ после хедера */
     padding: 2rem;
     max-width: 900px;
     margin-left: auto;
@@ -145,7 +113,7 @@ main {
     padding: 1.5rem;
     margin-bottom: 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s;
     position: relative;
 }
@@ -170,40 +138,16 @@ main {
 }
 
 /* Модальное окно */
-/* Стили для модального окна */
 .modal {
     display: none;
-    /* Скрыто по умолчанию */
     position: fixed;
     z-index: 1001;
-    /* Поверх всего контента */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    /* Полупрозрачный фон */
-}
-
-/* Основной стиль для модального окна */
-.modal-content {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 30px;
-    max-width: 600px;
-    margin: 10% auto;
-}
-
-/* Стили для заголовка модального окна */
-.modal-content h2 {
-    margin: 0;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #f0f0f0;
-    font-size: 1.5rem;
-    color: #0044cc;
-    text-align: center;
 }
 
 /* Стили для формы */
@@ -248,19 +192,6 @@ main {
     margin-top: 10px;
 }
 
-/* Стили для кнопки закрытия модального окна */
-.close {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #aaa;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: #000;
-}
-
-
 /* Стили для формы */
 .form-group {
     margin-bottom: 1.5rem;
@@ -301,7 +232,7 @@ main {
     color: #0055ff;
 }
 
-/* Обновленные стили для модального окна просмотра задачи */
+/* Основной стиль для модального окна */
 .modal-content {
     background-color: #ffffff;
     border-radius: 10px;
@@ -313,12 +244,14 @@ main {
     overflow: hidden;
 }
 
+/* Стили для заголовка модального окна */
 .modal-content h2 {
     margin: 0 0 20px;
     border-bottom: 2px solid #f0f0f0;
     font-size: 1.5rem;
     color: #0044cc;
     text-align: center;
+    padding-bottom: 20px;
 }
 
 .task-details {
@@ -385,7 +318,7 @@ main {
 .close {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 20px;
     font-size: 1.5rem;
     font-weight: bold;
     color: #aaa;
@@ -406,7 +339,7 @@ main {
 
 .progress-bar {
     height: 20px;
-    background-color: #76c7c0;
+    background-color: #769cc7;
     /* Цвет прогресс-бара */
     width: 0%;
     /* Начальная ширина */
