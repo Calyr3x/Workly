@@ -1,0 +1,8 @@
+{
+    "database": {
+        "user": "postgres",
+        "password": "calyrexx2003",
+        "dbname": "Workly",
+        "sslmode": "disable"
+    }
+}

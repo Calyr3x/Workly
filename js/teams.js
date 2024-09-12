@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!username) return;
 
         // Проверка наличия пользователя на сервере и получение его аватарки
-        const response = await fetch(`http://localhost:8083/getUserAvatar?username=${username}`);
+        const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
         if (response.ok) {
             const data = await response.json();
             if (teamMembers.includes(username)) {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const teamName = teamNameInput.value.trim();
 
         if (teamName && teamMembers.length > 0) {
-            const response = await fetch(`http://localhost:8083/createTeam?user_id=${userId}`, {
+            const response = await fetch(`http://localhost:8080/createTeam?user_id=${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getUserAvatar(username) {
-        const response = await fetch(`http://localhost:8083/getUserAvatar?username=${username}`);
+        const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
         if (response.ok) {
             const data = await response.json();
             return data.avatar;

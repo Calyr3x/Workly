@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let response;
             if (editingTaskID) {
                 loaderContainer.style.display = 'flex';
-                response = await fetch(`http://localhost:8081/tasks/update`, {
+                response = await fetch(`http://localhost:8080/tasks/update`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 loaderContainer.style.display = 'flex';
-                response = await fetch('http://localhost:8081/tasks/create', {
+                response = await fetch('http://localhost:8080/tasks/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function deleteTask(taskID) {
         try {
             loaderContainer.style.display = 'flex';
-            const response = await fetch(`http://localhost:8081/tasks/delete?id=${taskID}`, {
+            const response = await fetch(`http://localhost:8080/tasks/delete?id=${taskID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchTasks(userId) {
         try {
-            const response = await fetch(`http://localhost:8081/tasks?user_id=${userId}`);
+            const response = await fetch(`http://localhost:8080/tasks?user_id=${userId}`);
             if (response.ok) {
                 loaderContainer.style.display = 'none';
                 const tasks = await response.json();
