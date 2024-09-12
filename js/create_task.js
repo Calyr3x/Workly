@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let response;
             if (editingTaskID) {
+                loaderContainer.style.display = 'flex';
                 response = await fetch(`http://localhost:8081/tasks/update`, {
                     method: 'PUT',
                     headers: {
@@ -138,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 });
             } else {
+                loaderContainer.style.display = 'flex';
                 response = await fetch('http://localhost:8081/tasks/create', {
                     method: 'POST',
                     headers: {
@@ -154,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (response.ok) {
+                loaderContainer.style.display = 'none';
                 const result = await response.json();
                 fetchTasks(userId);
                 closeModal();
@@ -163,10 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        loaderContainer.style.display = 'none';
     });
 
     async function deleteTask(taskID) {
         try {
+            loaderContainer.style.display = 'flex';
             const response = await fetch(`http://localhost:8081/tasks/delete?id=${taskID}`, {
                 method: 'DELETE',
                 headers: {
@@ -202,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
+                    loaderContainer.style.display = 'none';
                 });
             } else {
                 loaderContainer.style.display = 'none';
@@ -210,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        loaderContainer.style.display = 'none';
     }
 
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");

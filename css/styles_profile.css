@@ -419,3 +419,56 @@ main {
 #closeSuccessButton {
     margin-top: 10px;
 }
+
+.loader-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.loader {
+    --c: no-repeat linear-gradient(#0044cc 0 0);
+    background:
+        var(--c), var(--c), var(--c),
+        var(--c), var(--c), var(--c),
+        var(--c), var(--c), var(--c);
+    background-size: 16px 16px;
+    animation:
+        l32-1 1.5s infinite,
+        l32-2 1.5s infinite;
+}
+
+@keyframes l32-1 {
+
+    0%,
+    100% {
+        width: 45px;
+        height: 45px
+    }
+
+    35%,
+    65% {
+        width: 65px;
+        height: 65px
+    }
+}
+
+@keyframes l32-2 {
+
+    0%,
+    40% {
+        background-position: 0 0, 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0, 50% 0, 50% 50%
+    }
+
+    60%,
+    100% {
+        background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0, 50% 0, 0 0, 50% 50%
+    }
+}

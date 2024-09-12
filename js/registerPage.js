@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('#loginForm');
     const registerButton = document.querySelector('#registerButton');
+    const loaderContainer = document.querySelector('.loader-container');
 
     if (!form || !registerButton) {
         console.error('Form or buttons not found');
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.querySelector('#text').value;
 
         if (event.submitter === registerButton) {
+            loaderContainer.style.display = 'flex';
             // Handle registration
             await handleRegistration(email, password, username);
         }
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
+                loaderContainer.style.display = 'none';
                 // Показываем анимацию успешной регистрации с затемнением фона
                 showSuccessMessage();
             } else {
@@ -39,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        loaderContainer.style.display = 'none';
     }
 
     // Включение\выключение видимости пароля

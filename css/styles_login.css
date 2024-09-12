@@ -72,7 +72,7 @@ header.scrolled {
 
 canvas.animated-blob {
     position: absolute;
-    top: 25px;
+    top: 0px;
     left: 0;
     width: 100%;
     height: 100%;
@@ -390,38 +390,51 @@ canvas.animated-blob {
     display: none;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
     width: 100vw;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-.loader::before,
-.loader::after {
-    width: 2vmin;
-    height: 2vmin;
-    background-color: #003399;
-    border-radius: 50%;
-    animation: loader 1s ease-in-out infinite;
-    content: '';
-    position: absolute;
+.loader {
+    --c: no-repeat linear-gradient(#0044cc 0 0);
+    background:
+        var(--c), var(--c), var(--c),
+        var(--c), var(--c), var(--c),
+        var(--c), var(--c), var(--c);
+    background-size: 16px 16px;
+    animation:
+        l32-1 1.5s infinite,
+        l32-2 1.5s infinite;
 }
 
-.loader::before {
-    left: calc(50% - 1.6vmin - 2vmin);
-}
-
-.loader::after {
-    left: calc(50% + 1.6vmin);
-    animation-delay: -0.4s;
-}
-
-@keyframes loader {
+@keyframes l32-1 {
 
     0%,
     100% {
-        transform: translateY(-2.6vmin);
+        width: 45px;
+        height: 45px
     }
 
-    44% {
-        transform: translateY(2.6vmin);
+    35%,
+    65% {
+        width: 65px;
+        height: 65px
+    }
+}
+
+@keyframes l32-2 {
+
+    0%,
+    40% {
+        background-position: 0 0, 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0, 50% 0, 50% 50%
+    }
+
+    60%,
+    100% {
+        background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0, 50% 0, 0 0, 50% 50%
     }
 }

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editUsernameButton = document.getElementById('editUsernameButton');
     const profileForm = document.getElementById('profileForm');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    const loaderContainer = document.querySelector('.loader-container');
 
     let selectedAvatarSrc = '';
 
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             avatarModal.style.display = 'none';
 
             // Отправить выбранный аватар на сервер
+            loaderContainer.style.display = 'flex';
             await saveAvatar(selectedAvatarSrc, userId);
         }
     });
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log('Ошибка при обновлении аватара.');
         }
+        loaderContainer.style.display = 'none';
     }
 
     function loadAvatars() {
@@ -92,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 avatar.src = data.avatar;
             }
         }
+        loaderContainer.style.display = 'none';
     }
 
     // Редактировать имя пользователя
@@ -127,8 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log('Ошибка при обновлении имени пользователя.');
         }
+        loaderContainer.style.display = 'none';
     });
-
+    loaderContainer.style.display = 'flex';
     // Загрузить текущий аватар и данные пользователя при загрузке страницы
     getUserData(userId);
 
