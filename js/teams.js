@@ -6,18 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamMemberInput = document.getElementById('teamMemberInput');
     const addMemberButton = document.getElementById('addMemberButton');
     const teamMembersList = document.getElementById('teamMembersList');
-    const errorMessage = document.createElement('p');
+    const errorMessage = document.getElementById('errorMessage');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    errorMessage.style.color = 'red';
-    errorMessage.style.display = 'none';
-    createTeamModal.appendChild(errorMessage);
 
     const teamMembers = [];
 
     // Модальное окно успешного создания команды
     const successModal = document.getElementById('successModal');
-    const successMessage = document.getElementById('successMessage');
-    const successMembersList = document.getElementById('successMembersList');
     const closeSuccessButton = document.getElementById('closeSuccessButton');
 
     // Открыть модальное окно создания команды
@@ -45,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!username) return;
 
-        // Проверка наличия пользователя на сервере и получение его аватарки
         const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
         if (response.ok) {
             const data = await response.json();
@@ -101,35 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
-    // Функция отображения модального окна успешного создания команды
-    async function displaySuccessModal(teamName, members) {
-        successMessage.textContent = `Команда "${teamName}" создана!`;
-        successMembersList.innerHTML = '';
-
-        for (const username of members) {
-            const avatarUrl = await getUserAvatar(username);
-            const listItem = document.createElement('li');
-            const avatarImg = document.createElement('img');
-            avatarImg.src = avatarUrl;
-            avatarImg.alt = 'Avatar';
-            avatarImg.classList.add('avatar-thumbnail');
-            listItem.appendChild(avatarImg);
-            listItem.appendChild(document.createTextNode(username));
-            successMembersList.appendChild(listItem);
-        }
-
-        successModal.style.display = 'block';
-    }
-
-    async function getUserAvatar(username) {
-        const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
-        if (response.ok) {
-            const data = await response.json();
-            return data.avatar;
-        }
-        return ''; // Возвращаем пустую строку, если аватар не найден
-    }
 
     // Функция сброса формы создания команды
     function resetCreateTeamForm() {

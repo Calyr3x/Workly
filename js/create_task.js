@@ -13,14 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskDescription').value = task.description;
             document.getElementById('taskDeadline').value = new Date(task.deadline).toISOString().split('T')[0];
-            document.getElementById('taskUsers').value = '';
             editingTaskID = task.id;
             document.getElementById('modalTitle').innerText = 'Редактировать задачу';
         } else {
             document.getElementById('taskName').value = '';
             document.getElementById('taskDescription').value = '';
             document.getElementById('taskDeadline').value = '';
-            document.getElementById('taskUsers').value = '';
             editingTaskID = null;
             document.getElementById('modalTitle').innerText = 'Создать задачу';
         }
@@ -117,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.getElementById('taskDescription').value;
         const deadlineDate = new Date(document.getElementById('taskDeadline').value);
         const deadlineIso = deadlineDate.toISOString();
-        const userEmails = document.getElementById('taskUsers').value.split(',').map(email => email.trim()).filter(email => email);
 
         try {
             const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -135,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         name,
                         description,
                         deadline: deadlineIso,
-                        user_ids: userEmails
                     })
                 });
             } else {
@@ -150,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         description,
                         deadline: deadlineIso,
                         creator_id: userId,
-                        user_ids: userEmails
                     })
                 });
             }

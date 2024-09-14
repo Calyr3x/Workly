@@ -13,13 +13,12 @@ import (
 
 // Task структура задачи
 type Task struct {
-	ID          uuid.UUID   `json:"id"`
-	Name        string      `json:"name"`
-	Description string      `json:"description"`
-	CreatedAt   time.Time   `json:"created_at"`
-	Deadline    time.Time   `json:"deadline"`
-	CreatorID   uuid.UUID   `json:"creator_id"`
-	UserIDs     []uuid.UUID `json:"user_ids"`
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	Deadline    time.Time `json:"deadline"`
+	CreatorID   uuid.UUID `json:"creator_id"`
 }
 
 // HandleTasks обрабатывает запросы на получение задач
@@ -63,11 +62,10 @@ func HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var task struct {
-		Name        string      `json:"name"`
-		Description string      `json:"description"`
-		Deadline    string      `json:"deadline"`
-		CreatorID   uuid.UUID   `json:"creator_id"`
-		UserIDs     []uuid.UUID `json:"user_ids"`
+		Name        string    `json:"name"`
+		Description string    `json:"description"`
+		Deadline    string    `json:"deadline"`
+		CreatorID   uuid.UUID `json:"creator_id"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
@@ -91,20 +89,6 @@ func HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if len(task.UserIDs) == 0 {
-		task.UserIDs = []uuid.UUID{task.CreatorID}
-	}
-
-	for _, userID := range task.UserIDs {
-		_, err := db.DB.Exec(`
-			INSERT INTO task_access (task_id, user_id) VALUES ($1, $2)`,
-			taskID, userID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"task_id": taskID.String()})
 }
@@ -117,11 +101,10 @@ func HandleUpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var task struct {
-		ID          uuid.UUID   `json:"id"`
-		Name        string      `json:"name"`
-		Description string      `json:"description"`
-		Deadline    string      `json:"deadline"`
-		UserIDs     []uuid.UUID `json:"user_ids"`
+		ID          uuid.UUID `json:"id"`
+		Name        string    `json:"name"`
+		Description string    `json:"description"`
+		Deadline    string    `json:"deadline"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
@@ -144,16 +127,6 @@ func HandleUpdateTask(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
-
-	for _, userID := range task.UserIDs {
-		_, err := db.DB.Exec(`
-            INSERT INTO task_access (task_id, user_id) VALUES ($1, $2)`,
-			task.ID, userID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -219,17 +192,6 @@ func HandleGetTaskByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer rows.Close()
-
-	var userIDs []uuid.UUID
-	for rows.Next() {
-		var userID uuid.UUID
-		if err := rows.Scan(&userID); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		userIDs = append(userIDs, userID)
-	}
-	task.UserIDs = userIDs
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(task)
