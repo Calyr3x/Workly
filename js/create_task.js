@@ -71,16 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hoursRemaining > 0) timeParts.push(`${hoursRemaining}ч`);
         if (minutesRemaining > 0) timeParts.push(`${minutesRemaining}м`);
 
+        // Обновление прогресс-бара
+        const progressBar = document.getElementById('progressBar');
+        const progressPercentage = Math.max(0, Math.min(100, (timePassed / totalDuration) * 100));
+        progressBar.style.width = `${progressPercentage}%`;
+
+        if (daysRemaining <= 0 && hoursRemaining <= 0 && minutesRemaining <= 0) {
+            timeParts.push('Задача просрочена');
+            progressBar.style.backgroundColor = 'red'
+        }
+
         // Соединяем части в одну строку
         const timeText = timeParts.join(' ');
 
         // Обновление текста
         document.getElementById('timeRemainingValue').textContent = timeText;
-
-        // Обновление прогресс-бара
-        const progressBar = document.getElementById('progressBar');
-        const progressPercentage = Math.max(0, Math.min(100, (timePassed / totalDuration) * 100));
-        progressBar.style.width = `${progressPercentage}%`;
 
         // Обновление оставшегося времени каждую минуту
         setTimeout(() => updateTimeRemaining(deadline, createdAt, new Date()), 60000);
