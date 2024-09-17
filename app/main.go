@@ -33,6 +33,9 @@ func main() {
 	http.HandleFunc("/updateUsername", middleware.WithCORS(handlers.HandleUpdateUsername))
 	http.HandleFunc("/createTeam", middleware.WithCORS(handlers.HandleCreateTeam))
 	http.HandleFunc("/getUserAvatar", middleware.WithCORS(handlers.HandleGetUserAvatar))
+	http.HandleFunc("/getTeams", middleware.WithCORS(handlers.HandleGetTeams))
+	http.HandleFunc("/removeMember", middleware.WithCORS(handlers.HandleRemoveMember))
+	http.HandleFunc("/addMember", middleware.WithCORS(handlers.HandleAddMember))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

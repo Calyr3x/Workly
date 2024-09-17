@@ -408,6 +408,65 @@ main {
     margin-top: 10px;
 }
 
+#teamsList {
+    list-style: none;
+    padding: 0;
+}
+
+.team-item {
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-item h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.team-members {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.team-members li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.team-members li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.remove-member,
+.add-member {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-member {
+    background-color: #4CAF50;
+    margin-top: 10px;
+}
+
+.add-member:hover,
+.remove-member:hover {
+    opacity: 0.9;
+}
+
 .loader-container {
     display: none;
     justify-content: center;
