@@ -29,11 +29,18 @@ func HandleCreateTeam(w http.ResponseWriter, r *http.Request) {
 
 	userID := r.URL.Query().Get("user_id") // Получаем идентификатор пользователя из параметров URL
 
-	// Создать команду в базе данных
+	// Создаем команду в базе данных
 	var teamID int
 	err := db.DB.QueryRow("INSERT INTO teams (name, owner_id) VALUES ($1, $2) RETURNING id", requestData.Name, userID).Scan(&teamID)
 	if err != nil {
 		http.Error(w, "Failed to create team", http.StatusInternalServerError)
+		return
+	}
+
+	// Добавляем создателя команды в команду
+	_, err = db.DB.Exec("INSERT INTO team_members (team_id, user_id) VALUES ($1, $2)", teamID, userID)
+	if err != nil {
+		http.Error(w, "Failed to add team creator to members", http.StatusInternalServerError)
 		return
 	}
 
@@ -76,7 +83,7 @@ func HandleGetUserAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Отправить данные аватара пользователя
+	// Отправляем данные аватара пользователя
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"avatar": avatar,

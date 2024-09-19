@@ -104,8 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
         successMessage.textContent = `Команда "${teamName}" создана!`;
         successMembersList.innerHTML = '';
 
-        for (const username of members) {
+        // Создаем массив промисов для загрузки аватаров всех участников
+        const avatarPromises = members.map(async (username) => {
             const avatarUrl = await getUserAvatar(username);
+            return { username, avatarUrl };
+        });
+
+        // Ждем, пока все аватары загрузятся
+        const memberAvatars = await Promise.all(avatarPromises);
+
+        // Добавляем каждого участника в список
+        memberAvatars.forEach(({ username, avatarUrl }) => {
             const listItem = document.createElement('li');
             const avatarImg = document.createElement('img');
             avatarImg.src = avatarUrl;
@@ -114,10 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
             listItem.appendChild(avatarImg);
             listItem.appendChild(document.createTextNode(username));
             successMembersList.appendChild(listItem);
-        }
+        });
 
         successModal.style.display = 'block';
     }
+
 
     async function getUserAvatar(username) {
         const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
