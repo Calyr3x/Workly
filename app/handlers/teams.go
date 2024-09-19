@@ -143,10 +143,11 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
-	log.Print(userID)
+
 	_, err = db.DB.Exec("INSERT INTO team_members (team_id, user_id) VALUES ($1, $2)", requestData.TeamID, userID)
 	if err != nil {
 		http.Error(w, "Failed to add member", http.StatusInternalServerError)
+		log.Print(err)
 		return
 	}
 

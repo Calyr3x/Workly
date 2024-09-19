@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Удалить участника
     async function handleRemoveMember(event) {
-        const teamId = event.target.dataset.teamId;
+        const teamId = Number(event.target.dataset.teamId);
         const member = event.target.dataset.member;
 
         const response = await fetch('http://localhost:8080/removeMember', {
@@ -74,13 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                TeamID: teamId,
+                team_id: teamId,
                 Member: member,
             }),
         });
 
         if (response.ok) {
-            event.target.closest('li').remove();
+            getTeams(userId);
         } else {
             alert('Ошибка при удалении участника');
         }
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Добавить участника
     async function handleAddMember(event) {
-        const teamId = event.target.dataset.teamId;
+        const teamId = Number(event.target.dataset.teamId);
         const member = prompt('Введите юзернейм участника для добавления:');
 
         if (member) {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    TeamID: teamId,
+                    team_id: teamId,
                     Member: member,
                 }),
             });
