@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const teamsList = document.getElementById('teamsList');
     const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    const loaderContainer = document.querySelector('.loader-container');
 
     // Функция для получения команд пользователя
     async function getTeams(userId) {
@@ -61,10 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.add-member').forEach(button => {
             button.addEventListener('click', handleAddMember);
         });
+        loaderContainer.style.display = 'none';
     }
 
     // Удалить участника
     async function handleRemoveMember(event) {
+        loaderContainer.style.display = 'flex';
         const teamId = Number(event.target.dataset.teamId);
         const member = event.target.dataset.member;
 
@@ -88,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Добавить участника
     async function handleAddMember(event) {
+        loaderContainer.style.display = 'flex';
         const teamId = Number(event.target.dataset.teamId);
         const member = prompt('Введите юзернейм участника для добавления:');
 
@@ -111,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
+    loaderContainer.style.display = 'flex';
     // Загрузить команды при загрузке страницы
     getTeams(userId);
 });

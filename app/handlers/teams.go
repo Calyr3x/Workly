@@ -3,7 +3,6 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"workly/db"
@@ -144,10 +143,23 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Проверяем, есть ли пользователь в этой команде
+	var exists bool
+	err = db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM team_members WHERE team_id = $1 AND user_id = $2)", requestData.TeamID, userID).Scan(&exists)
+	if err != nil {
+		http.Error(w, "Failed to check membership", http.StatusInternalServerError)
+		return
+	}
+
+	if exists {
+		http.Error(w, "User is already a member of the team", http.StatusConflict)
+		return
+	}
+
+	// Добавляем пользователя в команду, если его ещё нет
 	_, err = db.DB.Exec("INSERT INTO team_members (team_id, user_id) VALUES ($1, $2)", requestData.TeamID, userID)
 	if err != nil {
 		http.Error(w, "Failed to add member", http.StatusInternalServerError)
-		log.Print(err)
 		return
 	}
 
