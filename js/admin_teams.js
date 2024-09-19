@@ -24,9 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return ''; // Возвращаем пустую строку, если аватар не найден
     }
 
+    async function getUserData(userId) {
+        const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.username) {
+                return data.username;
+            }
+        }
+    }
+
     // Функция для отображения команд на странице
     async function displayTeams(teams) {
         teamsList.innerHTML = '';  // Очищаем список перед добавлением новых данных
+        const username = await getUserData(userId);
         for (const team of teams) {
             const teamElement = document.createElement('li');
             teamElement.classList.add('team-item');
@@ -41,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <li>
                             <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='default-avatar.png';" />
                             ${member}
-                            ${isOwner && member !== userId ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
+                            ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
                         </li>`;
             }
 
