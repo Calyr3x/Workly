@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
             teamElement.classList.add('team-item');
             const isOwner = team.owner_id === userId; // Проверка, является ли пользователь владельцем
 
+            const ownerUsername = await getUserData(team.owner_id); // Получаем имя создателья команды, для последующего выделения его в списке
+
             let teamHTML = `<h3>${team.name}</h3>`;
             teamHTML += '<ul class="team-members">';
 
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 teamHTML += `
                         <li>
                             <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='default-avatar.png';" />
-                            ${member}
+                            ${member} ${member === ownerUsername ? `(Создатель)` : ''}
                             ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
                         </li>`;
             }
