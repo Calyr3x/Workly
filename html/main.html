@@ -63,6 +63,18 @@
                     <label for="isTeamTask">Командное задание?</label>
                     <input type="checkbox" id="isTeamTask">
                 </div>
+                <div id="teamSelection" class="form-group" style="display:none;">
+                    <label for="teamSelect">Выберите команду:</label>
+                    <select id="teamSelect" class="form-control">
+                        <!-- Сюда будут загружены команды -->
+                    </select>
+                </div>
+                <div id="memberSelection" class="form-group" style="display:none;">
+                    <label for="memberSelect">Выберите участника:</label>
+                    <select id="memberSelect" class="form-control">
+                        <!-- Сюда будут загружены участники выбранной команды -->
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Сохранить задачу</button>
             </form>
         </div>
@@ -100,6 +112,7 @@
     </div>
 
     <script src="/js/create_task.js"></script>
+    <script src="/js/team_task.js"></script>
 </body>
 
 </html>

@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButtons = document.querySelectorAll('.modal .close');
     const taskList = document.getElementById('taskList');
     const loaderContainer = document.querySelector('.loader-container');
+    const isTeamTaskCheckbox = document.getElementById('isTeamTask');
+    const teamSelection = document.getElementById('teamSelection');
+    const memberSelection = document.getElementById('memberSelection');
+    const teamSelect = document.getElementById('teamSelect');
+    const memberSelect = document.getElementById('memberSelect');
     let editingTaskID = null;
 
     // Функция для открытия модального окна создания/редактирования задачи
@@ -112,6 +117,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addTaskButton.addEventListener('click', () => openModal());
 
+    // Отображаем выбор команды при активации чекбокса командного задания
+    isTeamTaskCheckbox.addEventListener('change', () => {
+        if (isTeamTaskCheckbox.checked) {
+            teamSelection.style.display = 'block';
+            loadTeams();
+        } else {
+            teamSelection.style.display = 'none';
+            memberSelection.style.display = 'none';
+        }
+    });
+
+    let teamsMap = {}; // Список участников команды
+
+    // Загрузка списка команд
+    async function loadTeams() {
+        try {
+            const response = await fetch(`http://localhost:8080/getTeams?user_id=${userId}`);
+            if (response.ok) {
+                const teams = await response.json();
+                teams.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.id;
+                    option.textContent = team.name;
+                    teamSelect.appendChild(option);
+                });
+
+                // Хранение участников команды
+                teams.forEach(team => {
+                    teamsMap[team.id] = team.members;
+                });
+
+                teamSelect.addEventListener('change', () => {
+                    const selectedTeamId = teamSelect.value;
+                    if (selectedTeamId) {
+                        loadMembers(teamsMap[selectedTeamId]);
+                    } else {
+                        memberSelection.style.display = 'none';
+                    }
+                });
+            } else {
+                alert('Ошибка загрузки команд');
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки команд:', error);
+        }
+    }
+
+    // Загрузка участников выбранной команды
+    function loadMembers(members) {
+        memberSelect.innerHTML = '';
+        const allMembersOption = document.createElement('option');
+        allMembersOption.value = 'all';
+        allMembersOption.textContent = 'Назначить на всю команду';
+        memberSelect.appendChild(allMembersOption);
+        members.forEach(member => {
+            const option = document.createElement('option');
+            option.value = member;
+            option.textContent = member;
+            memberSelect.appendChild(option);
+        });
+        memberSelection.style.display = 'block';
+    }
+
     const taskForm = document.getElementById('taskForm');
     taskForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -125,6 +193,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
             let response;
+            let accessUserIds = [];
+
+            if (memberSelect.value === 'all') {
+                const selectedTeamId = teamSelect.value;
+
+                // Получаем ID участников команды по их юзернеймам
+                const members = teamsMap[selectedTeamId]; // Массив юзернеймов
+                const userIdsResponse = await fetch(`http://localhost:8080/getUserIds`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usernames: members })
+                });
+
+                if (userIdsResponse.ok) {
+                    const userIds = await userIdsResponse.json();
+                    accessUserIds = userIds.map(user => user.id); // Предполагаем, что ответ содержит id
+                } else {
+                    alert('Ошибка получения ID участников');
+                    return;
+                }
+            } else {
+                accessUserIds.push(memberSelect.value); // Добавляем только выбранного участника
+            }
+
+            // Вставка задачи
             if (editingTaskID) {
                 loaderContainer.style.display = 'flex';
                 response = await fetch(`http://localhost:8080/tasks/update`, {
@@ -156,8 +251,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (response.ok) {
-                loaderContainer.style.display = 'none';
                 const result = await response.json();
+                const taskId = result.task_id;
+
+                // Вставка доступа к задаче
+                await Promise.all(accessUserIds.map(async (accessUserId) => {
+                    await fetch('http://localhost:8080/task_access', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            task_id: taskId,
+                            user_id: accessUserId
+                        })
+                    });
+                }));
+
+                loaderContainer.style.display = 'none';
                 fetchTasks(userId);
                 closeModal();
             } else {

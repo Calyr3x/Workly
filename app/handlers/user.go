@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"workly/db"
+
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 func WithCORS(next http.HandlerFunc) http.HandlerFunc {
@@ -101,4 +104,50 @@ func HandleGetUserData(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userData)
+}
+
+// Обрабатывает запрос на получение user_id по юзернеймам
+func HandleGetUserIds(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var request struct {
+		Usernames []string `json:"usernames"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	query := `
+		SELECT id, username FROM users WHERE username = ANY($1)`
+	rows, err := db.DB.Query(query, pq.Array(request.Usernames))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var userIds []struct {
+		ID       uuid.UUID `json:"id"`
+		Username string    `json:"username"`
+	}
+
+	for rows.Next() {
+		var user struct {
+			ID       uuid.UUID `json:"id"`
+			Username string    `json:"username"`
+		}
+		if err := rows.Scan(&user.ID, &user.Username); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		userIds = append(userIds, user)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(userIds)
 }

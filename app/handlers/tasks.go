@@ -196,3 +196,32 @@ func HandleGetTaskByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(task)
 }
+
+// HandleCreateTaskAccess обрабатывает вставку доступа к задаче
+func HandleCreateTaskAccess(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var access struct {
+		TaskID uuid.UUID `json:"task_id"`
+		UserID uuid.UUID `json:"user_id"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&access); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, err := db.DB.Exec(`
+		INSERT INTO task_access (task_id, user_id)
+		VALUES ($1, $2)`,
+		access.TaskID, access.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}

@@ -28,6 +28,7 @@ func main() {
 	http.HandleFunc("/tasks/update", middleware.WithCORS(handlers.HandleUpdateTask))
 	http.HandleFunc("/tasks/delete", middleware.WithCORS(handlers.HandleDeleteTask))
 	http.HandleFunc("/tasks/", middleware.WithCORS(handlers.HandleGetTaskByID))
+	http.HandleFunc("/task_access", middleware.WithCORS(handlers.HandleCreateTaskAccess))
 	http.HandleFunc("/updateAvatar", middleware.WithCORS(handlers.HandleUpdateAvatar))
 	http.HandleFunc("/getUserData", middleware.WithCORS(handlers.HandleGetUserData))
 	http.HandleFunc("/updateUsername", middleware.WithCORS(handlers.HandleUpdateUsername))
@@ -36,6 +37,7 @@ func main() {
 	http.HandleFunc("/getTeams", middleware.WithCORS(handlers.HandleGetTeams))
 	http.HandleFunc("/removeMember", middleware.WithCORS(handlers.HandleRemoveMember))
 	http.HandleFunc("/addMember", middleware.WithCORS(handlers.HandleAddMember))
+	http.HandleFunc("/getUserIds", middleware.WithCORS(handlers.HandleGetUserIds))
 
 	log.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
