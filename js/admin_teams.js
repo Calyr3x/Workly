@@ -38,27 +38,38 @@ document.addEventListener('DOMContentLoaded', () => {
     async function displayTeams(teams) {
         teamsList.innerHTML = '';  // Очищаем список перед добавлением новых данных
         const username = await getUserData(userId);
+
         for (const team of teams) {
             const teamElement = document.createElement('li');
             teamElement.classList.add('team-item');
             const isOwner = team.owner_id === userId; // Проверка, является ли пользователь владельцем
 
-            const ownerUsername = await getUserData(team.owner_id); // Получаем имя создателья команды, для последующего выделения его в списке
+            // Получаем имя создателя команды для последующего отображения
+            const ownerUsername = await getUserData(team.owner_id);
 
+            // Проверяем, если создатель не включён в список участников, добавляем его
+            if (!team.members.includes(ownerUsername)) {
+                team.members.unshift(ownerUsername);
+            }
+
+            // Создаём HTML для команды
             let teamHTML = `<h3>${team.name}</h3>`;
             teamHTML += '<ul class="team-members">';
 
+            // Рендерим каждого участника
             for (const member of team.members) {
-                const avatar = await getUserAvatar(member); // Получаем аватар пользователя
+                const avatar = await getUserAvatar(member);
                 teamHTML += `
-                        <li>
-                            <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='default-avatar.png';" />
-                            ${member} ${member === ownerUsername ? `(Создатель)` : ''}
-                            ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
-                        </li>`;
+                <li>
+                    <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='default-avatar.png';" />
+                    ${member} ${member === ownerUsername ? `(Создатель)` : ''}
+                    ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
+                </li>`;
             }
 
             teamHTML += '</ul>';
+
+            // Если пользователь — создатель, добавляем кнопку для добавления участников
             if (isOwner) {
                 teamHTML += `<button class="add-member" data-team-id="${team.id}">Добавить участника</button>`;
             }
@@ -67,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             teamsList.appendChild(teamElement);
         }
 
-        // Добавляем обработчики для кнопок добавления/удаления участников
+        // Добавляем обработчики для кнопок удаления и добавления участников
         document.querySelectorAll('.remove-member').forEach(button => {
             button.addEventListener('click', handleRemoveMember);
         });
@@ -75,8 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.add-member').forEach(button => {
             button.addEventListener('click', handleAddMember);
         });
+
         loaderContainer.style.display = 'none';
     }
+
 
     // Удалить участника
     async function handleRemoveMember(event) {
