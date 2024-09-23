@@ -130,12 +130,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let teamsMap = {}; // Список участников команды
 
-    // Загрузка списка команд
     async function loadTeams() {
         try {
             const response = await fetch(`http://localhost:8080/getTeams?user_id=${userId}`);
             if (response.ok) {
                 const teams = await response.json();
+
+                if (teams.length === 0) {
+                    alert('У вас нет команд');
+                    return;
+                }
+
+                // Добавляем команды в селектор
                 teams.forEach(team => {
                     const option = document.createElement('option');
                     option.value = team.id;
@@ -143,11 +149,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     teamSelect.appendChild(option);
                 });
 
-                // Хранение участников команды
+                // Хранение участников каждой команды в объекте teamsMap
                 teams.forEach(team => {
                     teamsMap[team.id] = team.members;
                 });
 
+                // Если только одна команда, сразу отображаем её участников
+                if (teams.length === 1) {
+                    teamSelect.value = teams[0].id;  // Устанавливаем значение в селекторе
+                    loadMembers(teamsMap[teams[0].id]);  // Загружаем участников команды
+                } else {
+                    // Если больше одной команды, отображаем участников первой команды по умолчанию
+                    teamSelect.value = teams[0].id;  // Устанавливаем первую команду как выбранную
+                    loadMembers(teamsMap[teams[0].id]);
+                }
+
+                // Добавляем обработчик изменения команды
                 teamSelect.addEventListener('change', () => {
                     const selectedTeamId = teamSelect.value;
                     if (selectedTeamId) {
@@ -164,21 +181,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Загрузка участников выбранной команды
+    // Функция для отображения участников выбранной команды
     function loadMembers(members) {
-        memberSelect.innerHTML = '';
+        memberSelect.innerHTML = '';  // Очищаем текущий список участников
+
+        // Добавляем опцию "Назначить на всю команду"
         const allMembersOption = document.createElement('option');
         allMembersOption.value = 'all';
         allMembersOption.textContent = 'Назначить на всю команду';
         memberSelect.appendChild(allMembersOption);
+
+        // Добавляем участников команды
         members.forEach(member => {
             const option = document.createElement('option');
             option.value = member;
             option.textContent = member;
             memberSelect.appendChild(option);
         });
-        memberSelection.style.display = 'block';
+        memberSelection.style.display = 'block';  // Отображаем блок выбора участников
     }
+
 
     const taskForm = document.getElementById('taskForm');
     taskForm.addEventListener('submit', async (event) => {
