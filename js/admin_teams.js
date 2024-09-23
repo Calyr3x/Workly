@@ -115,32 +115,92 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Добавить участника
+    // Открытие модального окна добавления участников
     async function handleAddMember(event) {
-        loaderContainer.style.display = 'flex';
         const teamId = Number(event.target.dataset.teamId);
-        const member = prompt('Введите юзернейм участника для добавления:');
+        document.getElementById('addMemberModal').style.display = 'block';
+        const member = [];
 
-        if (member) {
-            const response = await fetch('http://localhost:8080/addMember', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    team_id: teamId,
-                    Member: member,
-                }),
-            });
+        // Добавление участника в список
+        document.getElementById('addMemberButton2').addEventListener('click', async () => {
+            const username = document.getElementById('memberInput').value.trim();
+            const errorMessage = document.getElementById('addMemberErrorMessage');
+            errorMessage.style.display = 'none';
 
+            if (!username) return;
+
+            const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
             if (response.ok) {
-                // Обновляем список команд после добавления участника
-                getTeams(userId);
+                const data = await response.json();
+
+                if (member.includes(username)) {
+                    errorMessage.textContent = 'Этот участник уже добавлен.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                member.push(username);
+
+                const listItem = document.createElement('li');
+                const avatarImg = document.createElement('img');
+                avatarImg.src = data.avatar;
+                avatarImg.alt = 'Avatar';
+                avatarImg.classList.add('avatar-thumbnail');
+                listItem.appendChild(avatarImg);
+                listItem.appendChild(document.createTextNode(username));
+                document.getElementById('addedMembersList').appendChild(listItem);
+
+                document.getElementById('memberInput').value = '';
             } else {
-                alert('Ошибка при добавлении участника');
+                errorMessage.textContent = 'Пользователь не найден.';
+                errorMessage.style.display = 'block';
             }
-        }
+        });
+
+        // Сохранение участников
+        document.getElementById('saveMembersButton').addEventListener('click', async () => {
+            if (member.length === 0) {
+                alert('Добавьте хотя бы одного участника.');
+                return;
+            }
+
+            if (member) {
+                const response = await fetch('http://localhost:8080/addMember', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        team_id: teamId,
+                        Member: member,
+                    }),
+                });
+
+
+                if (response.ok) {
+                    // Обновляем список команд после добавления участника
+                    document.getElementById('addMemberModal').style.display = 'none';  // Закрыть модальное окно
+                    getTeams(userId);
+                } else {
+                    alert('Ошибка при добавлении участника');
+                }
+            }
+            loaderContainer.style.display = 'flex';
+            // Загрузить команды при загрузке страницы
+            getTeams(userId);
+        });
+
+        // Закрытие модального окна
+        document.getElementById('closeAddMemberModal').onclick = () => {
+            document.getElementById('addMemberModal').style.display = 'none';
+        };
     }
+
+    // Событие для открытия модального окна при клике на кнопку
+    document.querySelectorAll('.add-member').forEach(button => {
+        button.addEventListener('click', handleAddMember);
+    });
+
     loaderContainer.style.display = 'flex';
     // Загрузить команды при загрузке страницы
     getTeams(userId);

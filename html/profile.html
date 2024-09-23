@@ -122,6 +122,23 @@
         </div>
     </div>
 
+    <!-- Модальное окно для добавления участников -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeAddMemberModal">&times;</span>
+            <h2>Добавить участников</h2>
+            <div class="form-group">
+                <input type="text" id="memberInput" class="form-control" placeholder="Введите юзернейм">
+                <button type="button" id="addMemberButton2" class="btn btn-secondary">Добавить</button>
+            </div>
+            <ul id="addedMembersList" class="members-list">
+                <!-- Список добавленных участников будет добавляться динамически -->
+            </ul>
+            <button type="button" id="saveMembersButton" class="btn btn-primary">Сохранить</button>
+            <p class="error-message" id="addMemberErrorMessage" style="display:none;"></p>
+        </div>
+    </div>
+
     <script src="/js/profile.js"></script>
     <script src="/js/teams.js"></script>
     <script src="/js/admin_teams.js"></script>
