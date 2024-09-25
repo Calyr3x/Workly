@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"workly/db"
@@ -134,40 +135,43 @@ func HandleGetTeams(w http.ResponseWriter, r *http.Request) {
 func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 
 	var requestData struct {
-		TeamID int    `json:"team_id"`
-		Member string `json:"member"`
+		TeamID int      `json:"team_id"`
+		Member []string `json:"member"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		log.Println(err)
 		return
 	}
 
-	var userID uuid.UUID
-	err := db.DB.QueryRow("SELECT id FROM users WHERE username = $1", requestData.Member).Scan(&userID)
-	if err != nil {
-		http.Error(w, "User not found", http.StatusNotFound)
-		return
-	}
+	// Добавляем участников по их юзернеймам
+	for _, username := range requestData.Member {
+		var memberID uuid.UUID
+		err := db.DB.QueryRow("SELECT id FROM users WHERE username = $1", username).Scan(&memberID)
+		if err != nil {
+			http.Error(w, "Failed to find user", http.StatusBadRequest)
+			return
+		}
 
-	// Проверяем, есть ли пользователь в этой команде
-	var exists bool
-	err = db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM team_members WHERE team_id = $1 AND user_id = $2)", requestData.TeamID, userID).Scan(&exists)
-	if err != nil {
-		http.Error(w, "Failed to check membership", http.StatusInternalServerError)
-		return
-	}
+		// Проверяем, есть ли пользователь в этой команде
+		var exists bool
+		err = db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM team_members WHERE team_id = $1 AND user_id = $2)", requestData.TeamID, memberID).Scan(&exists)
+		if err != nil {
+			http.Error(w, "Failed to check membership", http.StatusInternalServerError)
+			return
+		}
 
-	if exists {
-		http.Error(w, "User is already a member of the team", http.StatusConflict)
-		return
-	}
+		if exists {
+			http.Error(w, "User is already a member of the team", http.StatusConflict)
+			return
+		}
 
-	// Добавляем пользователя в команду, если его ещё нет
-	_, err = db.DB.Exec("INSERT INTO team_members (team_id, user_id) VALUES ($1, $2)", requestData.TeamID, userID)
-	if err != nil {
-		http.Error(w, "Failed to add member", http.StatusInternalServerError)
-		return
+		_, err = db.DB.Exec("INSERT INTO team_members (team_id, user_id) VALUES ($1, $2)", requestData.TeamID, memberID)
+		if err != nil {
+			http.Error(w, "Failed to add member to team", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusOK)
