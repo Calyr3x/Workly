@@ -176,11 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }),
                 });
 
-
                 if (response.ok) {
                     // Обновляем список команд после добавления участника
                     document.getElementById('addMemberModal').style.display = 'none';  // Закрыть модальное окно
-                    getTeams(userId);
                 } else {
                     alert('Ошибка при добавлении участника');
                 }
