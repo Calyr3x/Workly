@@ -213,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.getElementById('taskDescription').value;
         const deadlineDate = new Date(document.getElementById('taskDeadline').value);
         const deadlineIso = deadlineDate.toISOString();
+        const taskStatus = document.getElementById('taskStatus').value;
 
         try {
             const userId = document.cookie.replace(/(?:(?:^|.*;\s*)user_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -257,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         name,
                         description,
                         deadline: deadlineIso,
-                        taskStatus,
+                        taskStatus
                     })
                 });
             } else {
