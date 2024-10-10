@@ -81,9 +81,9 @@ func HandleCreateTask(w http.ResponseWriter, r *http.Request) {
 
 	var taskID uuid.UUID
 	err = db.DB.QueryRow(`
-		INSERT INTO tasks (name, description, deadline, creator_id)
-		VALUES ($1, $2, $3, $4) RETURNING id`,
-		task.Name, task.Description, deadline, task.CreatorID).Scan(&taskID)
+		INSERT INTO tasks (name, description, deadline, creator_id, status)
+		VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+		task.Name, task.Description, deadline, task.CreatorID, "new").Scan(&taskID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -105,6 +105,7 @@ func HandleUpdateTask(w http.ResponseWriter, r *http.Request) {
 		Name        string    `json:"name"`
 		Description string    `json:"description"`
 		Deadline    string    `json:"deadline"`
+		Status      string    `json:"taskStatus"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
@@ -121,9 +122,9 @@ func HandleUpdateTask(w http.ResponseWriter, r *http.Request) {
 
 	_, err = db.DB.Exec(`
         UPDATE tasks
-        SET name = $1, description = $2, deadline = $3
-        WHERE id = $4`,
-		task.Name, task.Description, deadline, task.ID)
+        SET name = $1, description = $2, deadline = $3, status = $4
+        WHERE id = $5`,
+		task.Name, task.Description, deadline, task.Status, task.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

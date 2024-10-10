@@ -18,12 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskDescription').value = task.description;
             document.getElementById('taskDeadline').value = new Date(task.deadline).toISOString().split('T')[0];
+            document.getElementById('taskStatus').value = task.status;
+            document.getElementById('statusContainer').style.display = 'block'; // Показываем статус задачи при редактировании
             editingTaskID = task.id;
             document.getElementById('modalTitle').innerText = 'Редактировать задачу';
         } else {
             document.getElementById('taskName').value = '';
             document.getElementById('taskDescription').value = '';
             document.getElementById('taskDeadline').value = '';
+            document.getElementById('statusContainer').style.display = 'none'; // Скрываем статус задачи при создании
             editingTaskID = null;
             document.getElementById('modalTitle').innerText = 'Создать задачу';
         }
@@ -254,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         name,
                         description,
                         deadline: deadlineIso,
+                        taskStatus,
                     })
                 });
             } else {

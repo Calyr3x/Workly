@@ -59,6 +59,16 @@
                     <label for="taskDeadline">Дедлайн:</label>
                     <input type="datetime-local" id="taskDeadline" class="form-control">
                 </div>
+                <div class="form-group" id="statusContainer" style="display: none;">
+                    <label for="taskStatus">Статус задачи:</label>
+                    <select id="taskStatus" class="form-control">
+                        <option value="new">Новая</option>
+                        <option value="in_progress">В работе</option>
+                        <option value="completed">Выполнена</option>
+                        <option value="postponed">Отложена</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="isTeamTask">Командное задание?</label>
                     <input type="checkbox" id="isTeamTask">
