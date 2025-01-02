@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`http://localhost:8080/getTeams?user_id=${userId}`);
         if (response.ok) {
             const teams = await response.json();
-            displayTeams(teams);
+            if (teams === null) {
+                return [];
+            }
+            await displayTeams(teams);
         } else {
             console.error('Ошибка при получении команд');
         }

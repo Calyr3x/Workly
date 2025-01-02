@@ -84,15 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
-            if (data.username) {
-                usernameDisplay.textContent = data.username;
-                usernameInput.value = data.username;
+            if (data.Username) {
+                usernameDisplay.textContent = data.Username;
+                usernameInput.value = data.Username;
             }
-            if (data.email) {
-                emailDisplay.textContent = data.email;
+            if (data.Email) {
+                emailDisplay.textContent = data.Email;
             }
-            if (data.avatar) {
-                avatar.src = data.avatar;
+            if (data.Avatar) {
+                avatar.src = data.Avatar;
             }
         }
         loaderContainer.style.display = 'none';
