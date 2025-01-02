@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// User представляет пользователя
+// User структура пользователя
 type User struct {
 	ID       uuid.UUID
 	Email    string
