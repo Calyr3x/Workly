@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"workly/db"
@@ -55,9 +56,12 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.DB.Exec("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", user.Email, user.Password, user.Username)
+	userUUID, _ := uuid.NewRandom()
+
+	_, err := db.DB.Exec("INSERT INTO users (email, password, username, id) VALUES ($1, $2, $3, $4)", user.Email, user.Password, user.Username, userUUID)
 	if err != nil {
 		http.Error(w, "Failed to register user", http.StatusInternalServerError)
+		log.Fatal(err)
 		return
 	}
 
