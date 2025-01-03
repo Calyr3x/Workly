@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"workly/usecase"
 
@@ -74,6 +75,7 @@ func (h *UserHandler) GetUserIDs(w http.ResponseWriter, r *http.Request) {
 	users, err := h.uc.GetUserIDs(payload.Usernames)
 	if err != nil {
 		http.Error(w, "Failed to get user IDs", http.StatusInternalServerError)
+		log.Fatal(err)
 		return
 	}
 

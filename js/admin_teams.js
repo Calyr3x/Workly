@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
-            if (data.username) {
-                return data.username;
+            if (data.Username) {
+                return data.Username;
             }
         }
     }
@@ -45,28 +45,28 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const team of teams) {
             const teamElement = document.createElement('li');
             teamElement.classList.add('team-item');
-            const isOwner = team.owner_id === userId; // Проверка, является ли пользователь владельцем
+            const isOwner = team.OwnerID === userId; // Проверка, является ли пользователь владельцем
 
             // Получаем имя создателя команды для последующего отображения
-            const ownerUsername = await getUserData(team.owner_id);
+            const ownerUsername = await getUserData(team.OwnerID);
 
             // Проверяем, если создатель не включён в список участников, добавляем его
-            if (!team.members.includes(ownerUsername)) {
-                team.members.unshift(ownerUsername);
+            if (!team.Members.includes(ownerUsername)) {
+                team.Members.unshift(ownerUsername);
             }
 
             // Создаём HTML для команды
-            let teamHTML = `<h3>${team.name}</h3>`;
+            let teamHTML = `<h3>${team.Name}</h3>`;
             teamHTML += '<ul class="team-members">';
 
             // Рендерим каждого участника
-            for (const member of team.members) {
+            for (const member of team.Members) {
                 const avatar = await getUserAvatar(member);
                 teamHTML += `
                 <li>
-                    <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='default-avatar.png';" />
+                    <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='http://localhost:63342/imgs/profileIcons/default-avatar.png';" />
                     ${member} ${member === ownerUsername ? `(Создатель)` : ''}
-                    ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.id}" data-member="${member}">Удалить</button>` : ''}
+                    ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.ID}" data-member="${member}">Удалить</button>` : ''}
                 </li>`;
             }
 
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Если пользователь — создатель, добавляем кнопку для добавления участников
             if (isOwner) {
-                teamHTML += `<button class="add-member" data-team-id="${team.id}">Добавить участника</button>`;
+                teamHTML += `<button class="add-member" data-team-id="${team.ID}">Добавить участника</button>`;
             }
 
             teamElement.innerHTML = teamHTML;

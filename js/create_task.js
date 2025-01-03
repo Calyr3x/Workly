@@ -147,24 +147,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Добавляем команды в селектор
                 teams.forEach(team => {
                     const option = document.createElement('option');
-                    option.value = team.id;
-                    option.textContent = team.name;
+                    option.value = team.ID;
+                    option.textContent = team.Name;
                     teamSelect.appendChild(option);
                 });
 
                 // Хранение участников каждой команды в объекте teamsMap
                 teams.forEach(team => {
-                    teamsMap[team.id] = team.members;
+                    teamsMap[team.ID] = team.Members;
                 });
 
                 // Если только одна команда, сразу отображаем её участников
                 if (teams.length === 1) {
-                    teamSelect.value = teams[0].id;  // Устанавливаем значение в селекторе
-                    loadMembers(teamsMap[teams[0].id]);  // Загружаем участников команды
+                    teamSelect.value = teams[0].ID;  // Устанавливаем значение в селекторе
+                    loadMembers(teamsMap[teams[0].ID]);  // Загружаем участников команды
                 } else {
                     // Если больше одной команды, отображаем участников первой команды по умолчанию
-                    teamSelect.value = teams[0].id;  // Устанавливаем первую команду как выбранную
-                    loadMembers(teamsMap[teams[0].id]);
+                    teamSelect.value = teams[0].ID;  // Устанавливаем первую команду как выбранную
+                    loadMembers(teamsMap[teams[0].ID]);
                 }
 
                 // Добавляем обработчик изменения команды

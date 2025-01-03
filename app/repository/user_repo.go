@@ -46,7 +46,7 @@ func (r *UserRepositoryImpl) GetUserDataByUsernames(usernames []string) ([]domai
 	var users []domain.User
 	for rows.Next() {
 		var user domain.User
-		err := rows.Scan(&user.ID, &user.Username)
+		err := rows.Scan(&user.ID, &user.Username, &user.Avatar)
 		if err != nil {
 			return nil, err
 		}

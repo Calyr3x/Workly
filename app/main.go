@@ -30,6 +30,10 @@ func main() {
 	uc1 := usecase.NewTaskUseCase(repo1)
 	handler1 := handlers.NewTaskHandler(uc1)
 
+	repo2 := repository.NewTeamRepository(db.DB)
+	uc2 := usecase.NewTeamUseCase(repo2)
+	handler2 := handlers.NewTeamHandler(uc2)
+
 	// Регистрация обработчиков
 	http.HandleFunc("/login", middleware.WithCORS(handler.Login))
 	http.HandleFunc("/register", middleware.WithCORS(handler.Register))
@@ -42,11 +46,11 @@ func main() {
 	http.HandleFunc("/updateAvatar", middleware.WithCORS(handler.UpdateAvatar))
 	http.HandleFunc("/getUserData", middleware.WithCORS(handler.GetUserData))
 	http.HandleFunc("/updateUsername", middleware.WithCORS(handler.UpdateUsername))
-	http.HandleFunc("/createTeam", middleware.WithCORS(handlers.HandleCreateTeam))
-	http.HandleFunc("/getUserAvatar", middleware.WithCORS(handlers.HandleGetUserAvatar))
-	http.HandleFunc("/getTeams", middleware.WithCORS(handlers.HandleGetTeams))
-	http.HandleFunc("/removeMember", middleware.WithCORS(handlers.HandleRemoveMember))
-	http.HandleFunc("/addMember", middleware.WithCORS(handlers.HandleAddMember))
+	http.HandleFunc("/createTeam", middleware.WithCORS(handler2.CreateTeam))
+	http.HandleFunc("/getUserAvatar", middleware.WithCORS(handler2.GetUserAvatar))
+	http.HandleFunc("/getTeams", middleware.WithCORS(handler2.GetTeams))
+	http.HandleFunc("/removeMember", middleware.WithCORS(handler2.RemoveMember))
+	http.HandleFunc("/addMember", middleware.WithCORS(handler2.AddMember))
 	http.HandleFunc("/getUserIds", middleware.WithCORS(handler.GetUserIDs))
 
 	log.Println("Server is running on http://localhost:8080")
