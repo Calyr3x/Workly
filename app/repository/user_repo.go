@@ -36,8 +36,8 @@ func (r *UserRepositoryImpl) GetUserByID(userID uuid.UUID) (*domain.User, error)
 	return &user, err
 }
 
-func (r *UserRepositoryImpl) GetUserIDsByUsernames(usernames []string) ([]domain.User, error) {
-	rows, err := r.db.Query("SELECT id, username FROM users WHERE username = ANY($1)", pq.Array(usernames))
+func (r *UserRepositoryImpl) GetUserDataByUsernames(usernames []string) ([]domain.User, error) {
+	rows, err := r.db.Query("SELECT id, username, avatar FROM users WHERE username = ANY($1)", pq.Array(usernames))
 	if err != nil {
 		return nil, err
 	}

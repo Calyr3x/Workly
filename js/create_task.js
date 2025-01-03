@@ -15,12 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для открытия модального окна создания/редактирования задачи
     const openModal = (task = null) => {
         if (task) {
-            document.getElementById('taskName').value = task.name;
-            document.getElementById('taskDescription').value = task.description;
-            document.getElementById('taskDeadline').value = new Date(task.deadline).toISOString().split('T')[0];
-            document.getElementById('taskStatus').value = task.status;
+            document.getElementById('taskName').value = task.Name;
+            document.getElementById('taskDescription').value = task.Description;
+            document.getElementById('taskDeadline').value = new Date(task.Deadline).toISOString().split('T')[0];
+            document.getElementById('taskStatus').value = task.Status;
             document.getElementById('statusContainer').style.display = 'block'; // Показываем статус задачи при редактировании
-            editingTaskID = task.id;
+            editingTaskID = task.ID;
             document.getElementById('modalTitle').innerText = 'Редактировать задачу';
         } else {
             document.getElementById('taskName').value = '';
@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для открытия окна просмотра задачи
     const openTaskViewModal = (task) => {
-        const deadline = new Date(task.deadline);
-        const createdAt = new Date(task.created_at);
+        const deadline = new Date(task.Deadline);
+        const createdAt = new Date(task.Created_at);
         const now = new Date();
 
-        document.getElementById('viewTaskTitle').textContent = task.name;
-        document.getElementById('viewTaskDescription').textContent = task.description;
+        document.getElementById('viewTaskTitle').textContent = task.Name;
+        document.getElementById('viewTaskDescription').textContent = task.Description;
         document.getElementById('viewTaskDeadline').querySelector('span').textContent = deadline.toLocaleDateString();
 
         // Обработчик кнопки "Редактировать"
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Обработчик кнопки "Удалить"
         document.getElementById('deleteTaskButton').onclick = () => {
             if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
-                deleteTask(task.id);
+                deleteTask(task.ID);
                 closeModal();
             }
         };
@@ -339,9 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const li = document.createElement('li');
                     li.className = 'task-item';
                     li.innerHTML = `
-                        <h3>${task.name}</h3>
-                        <p>${task.description}</p>
-                        <span>Дедлайн: ${new Date(task.deadline).toLocaleString()}</span>
+                        <h3>${task.Name}</h3>
+                        <p>${task.Description}</p>
+                        <span>Дедлайн: ${new Date(task.Deadline).toLocaleString()}</span>
                     `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);

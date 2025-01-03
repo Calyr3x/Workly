@@ -10,7 +10,7 @@ type UserRepository interface {
 	UpdateAvatar(userID uuid.UUID, avatar string) error
 	UpdateUsername(userID uuid.UUID, username string) error
 	GetUserByID(userID uuid.UUID) (*domain.User, error)
-	GetUserIDsByUsernames(usernames []string) ([]domain.User, error)
+	GetUserDataByUsernames(usernames []string) ([]domain.User, error)
 	FindByEmail(email string) (*domain.User, error)
 	Create(user domain.User) error
 }
@@ -38,7 +38,7 @@ func (uc *UserUseCase) GetUserData(userID uuid.UUID) (*domain.User, error) {
 }
 
 func (uc *UserUseCase) GetUserIDs(usernames []string) ([]domain.User, error) {
-	return uc.repo.GetUserIDsByUsernames(usernames)
+	return uc.repo.GetUserDataByUsernames(usernames)
 }
 
 func (uc *UserUseCase) Login(email, password string) (*domain.User, error) {

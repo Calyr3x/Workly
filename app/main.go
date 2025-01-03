@@ -30,7 +30,7 @@ func main() {
 	uc1 := usecase.NewTaskUseCase(repo1)
 	handler1 := handlers.NewTaskHandler(uc1)
 
-	// Регистрация обработчиков с использованием middleware CORS
+	// Регистрация обработчиков
 	http.HandleFunc("/login", middleware.WithCORS(handler.Login))
 	http.HandleFunc("/register", middleware.WithCORS(handler.Register))
 	http.HandleFunc("/tasks", middleware.WithCORS(handler1.GetTasks))
