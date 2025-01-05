@@ -15,9 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для открытия модального окна создания/редактирования задачи
     const openModal = (task = null) => {
         if (task) {
+            const utcDate = new Date(task.Deadline);
+            const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+
+            document.getElementById('taskDeadline').value = localDate.toISOString().slice(0, 16);
             document.getElementById('taskName').value = task.Name;
             document.getElementById('taskDescription').value = task.Description;
-            document.getElementById('taskDeadline').value = new Date(task.Deadline).toISOString().slice(0, 16);
             document.getElementById('taskStatus').value = task.Status;
             document.getElementById('statusContainer').style.display = 'block'; // Показываем статус задачи при редактировании
             editingTaskID = task.ID;

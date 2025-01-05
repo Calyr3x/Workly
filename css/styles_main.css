@@ -553,9 +553,6 @@ input:checked + .slider:before {
     .checkbox-wrapper input[type=checkbox]:disabled + label {
         cursor: not-allowed;
     }
-    .checkbox-wrapper input[type=checkbox]:focus {
-        box-shadow: 0 0 0 var(--focus);
-    }
     .checkbox-wrapper input[type=checkbox]:not(.switch) {
         width: 21px;
     }
@@ -618,3 +615,31 @@ input:checked + .slider:before {
     box-sizing: inherit;
 }
 
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 40px 10px 12px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #0044cc;
+    box-shadow: 0 0 5px rgba(0, 68, 204, 0.2);
+    outline: none;
+}
+
+option {
+    background-color: #ffffff;
+    color: #333;
+}
