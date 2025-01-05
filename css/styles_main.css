@@ -455,6 +455,10 @@ main {
     background-color: #28a745;
 }
 
+.status-badge.postponed {
+    background-color: #8728a7;
+}
+
 .task-deadline {
     font-size: 0.85rem;
     color: #666;
