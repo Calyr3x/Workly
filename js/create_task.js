@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (task) {
             document.getElementById('taskName').value = task.Name;
             document.getElementById('taskDescription').value = task.Description;
-            document.getElementById('taskDeadline').value = new Date(task.Deadline).toISOString().split('T')[0];
+            document.getElementById('taskDeadline').value = new Date(task.Deadline).toISOString().slice(0, 16);
             document.getElementById('taskStatus').value = task.Status;
             document.getElementById('statusContainer').style.display = 'block'; // Показываем статус задачи при редактировании
             editingTaskID = task.ID;
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('statusContainer').style.display = 'none'; // Скрываем статус задачи при создании
             editingTaskID = null;
             document.getElementById('modalTitle').innerText = 'Создать задачу';
+            document.getElementById('isTeamTask').value = false;
         }
         taskModal.style.display = 'block';
     };
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 accessUserIds.push(memberSelect.value); // Добавляем только выбранного участника
             }
 
-            // Вставка задачи
+            // Отправка задачи на бэк
             if (editingTaskID) {
                 loaderContainer.style.display = 'flex';
                 response = await fetch(`http://localhost:8080/tasks/update`, {
