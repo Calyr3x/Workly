@@ -503,6 +503,10 @@ input:checked + .slider:before {
     vertical-align: middle;
 }
 
+.checkbox-wrapper{
+    user-select: none;
+}
+
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
     .checkbox-wrapper input[type=checkbox] {
         --active: #275EFE;
