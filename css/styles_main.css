@@ -467,12 +467,6 @@ main {
     margin-bottom: 1rem;
 }
 
-.task-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-}
-
 .task-item:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }

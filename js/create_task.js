@@ -347,10 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <p class="task-deadline">Дедлайн: ${deadline.toLocaleString()}</p>
                     <p class="task-description">${task.Description}</p>
-                    <div class="task-actions">
-                        <button class="btn btn-secondary" onclick="editTask('${task.ID}')">Редактировать</button>
-                        <button class="btn btn-danger" onclick="deleteTask('${task.ID}')">Удалить</button>
-                    </div>
                 `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
