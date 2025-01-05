@@ -130,7 +130,7 @@ main {
 
 .task-item span {
     font-size: 0.85rem;
-    color: #999;
+    color: #ffffff;
 }
 
 .task-item:hover {
@@ -414,4 +414,65 @@ main {
     100% {
         background-position: 0 50%, 0 100%, 50% 100%, 100% 100%, 100% 50%, 100% 0, 50% 0, 0 0, 50% 50%
     }
+}
+
+.task-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #fd0000;
+    text-transform: uppercase;
+}
+
+.status-badge.new {
+    background-color: #0044cc;
+}
+
+.status-badge.in_progress {
+    background-color: #ffa500;
+}
+
+.status-badge.completed {
+    background-color: #28a745;
+}
+
+.task-deadline {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.task-description {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.task-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.task-item:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }

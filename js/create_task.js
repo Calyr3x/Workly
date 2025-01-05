@@ -338,11 +338,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 tasks.forEach(task => {
                     const li = document.createElement('li');
                     li.className = 'task-item';
+                    const deadline = new Date(task.Deadline);
+
                     li.innerHTML = `
+                    <div class="task-header">
                         <h3>${task.Name}</h3>
-                        <p>${task.Description}</p>
-                        <span>Дедлайн: ${new Date(task.Deadline).toLocaleString()}</span>
-                    `;
+                        <span class="status-badge ${task.Status.toLowerCase()}">${getStatusLabel(task.Status)}</span>
+                    </div>
+                    <p class="task-deadline">Дедлайн: ${deadline.toLocaleString()}</p>
+                    <p class="task-description">${task.Description}</p>
+                    <div class="task-actions">
+                        <button class="btn btn-secondary" onclick="editTask('${task.ID}')">Редактировать</button>
+                        <button class="btn btn-danger" onclick="deleteTask('${task.ID}')">Удалить</button>
+                    </div>
+                `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
                     loaderContainer.style.display = 'none';
@@ -363,3 +372,18 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchTasks(userId);
     }
 });
+
+function getStatusLabel(status) {
+    switch (status.toLowerCase()) {
+        case 'new':
+            return 'Новая';
+        case 'in_progress':
+            return 'В работе';
+        case 'completed':
+            return 'Выполнена';
+        case 'postponed':
+            return 'Отложена';
+        default:
+            return 'Неизвестно';
+    }
+}
