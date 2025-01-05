@@ -70,7 +70,7 @@ func (h *TaskHandler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 		Name        string    `json:"name"`
 		Description string    `json:"description"`
 		Deadline    string    `json:"deadline"`
-		Status      string    `json:"status"`
+		Status      string    `json:"taskStatus"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)

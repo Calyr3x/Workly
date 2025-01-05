@@ -15,9 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для открытия модального окна создания/редактирования задачи
     const openModal = (task = null) => {
         if (task) {
+            const utcDate = new Date(task.Deadline);
+            const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+
+            document.getElementById('taskDeadline').value = localDate.toISOString().slice(0, 16);
             document.getElementById('taskName').value = task.Name;
             document.getElementById('taskDescription').value = task.Description;
-            document.getElementById('taskDeadline').value = new Date(task.Deadline).toISOString().split('T')[0];
             document.getElementById('taskStatus').value = task.Status;
             document.getElementById('statusContainer').style.display = 'block'; // Показываем статус задачи при редактировании
             editingTaskID = task.ID;
@@ -29,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('statusContainer').style.display = 'none'; // Скрываем статус задачи при создании
             editingTaskID = null;
             document.getElementById('modalTitle').innerText = 'Создать задачу';
+            document.getElementById('isTeamTask').value = false;
         }
         taskModal.style.display = 'block';
     };
@@ -245,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 accessUserIds.push(memberSelect.value); // Добавляем только выбранного участника
             }
 
-            // Вставка задачи
+            // Отправка задачи на бэк
             if (editingTaskID) {
                 loaderContainer.style.display = 'flex';
                 response = await fetch(`http://localhost:8080/tasks/update`, {
@@ -338,11 +342,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 tasks.forEach(task => {
                     const li = document.createElement('li');
                     li.className = 'task-item';
+                    const deadline = new Date(task.Deadline);
+
                     li.innerHTML = `
+                    <div class="task-header">
                         <h3>${task.Name}</h3>
-                        <p>${task.Description}</p>
-                        <span>Дедлайн: ${new Date(task.Deadline).toLocaleString()}</span>
-                    `;
+                        <span class="status-badge ${task.Status.toLowerCase()}">${getStatusLabel(task.Status)}</span>
+                    </div>
+                    <p class="task-deadline">Дедлайн: ${deadline.toLocaleString()}</p>
+                    <p class="task-description">${task.Description}</p>
+                `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
                     taskList.appendChild(li);
                     loaderContainer.style.display = 'none';
@@ -363,3 +372,18 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchTasks(userId);
     }
 });
+
+function getStatusLabel(status) {
+    switch (status.toLowerCase()) {
+        case 'new':
+            return 'Новая';
+        case 'in_progress':
+            return 'В работе';
+        case 'completed':
+            return 'Выполнена';
+        case 'postponed':
+            return 'Отложена';
+        default:
+            return 'Неизвестно';
+    }
+}

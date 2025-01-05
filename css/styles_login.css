@@ -53,13 +53,13 @@ header {
 }
 
 .btn:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     background-color: #0066ff;
 }
 
 .login {
     background-color: #f0f4f9;
-    padding: 4rem 2rem;
+    padding: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,13 +69,12 @@ header {
 
 .card {
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
-    z-index: 2;
-
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-title {
