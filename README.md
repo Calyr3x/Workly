@@ -1,7 +1,8 @@
 # Workly
 
-[![WakaTime](https://wakatime.com/badge/user/59b336cf-aff7-4a6f-9c4b-b4d1f457f7f2/project/7f2ca4b7-29ff-46fa-8810-bb1149c0e034.svg)](https://wakatime.com/badge/user/59b336cf-aff7-4a6f-9c4b-b4d1f457f7f2/project/7f2ca4b7-29ff-46fa-8810-bb1149c0e034)
+[![wakatime](https://wakatime.com/badge/user/59b336cf-aff7-4a6f-9c4b-b4d1f457f7f2/project/7f2ca4b7-29ff-46fa-8810-bb1149c0e034.svg)](https://wakatime.com/badge/user/59b336cf-aff7-4a6f-9c4b-b4d1f457f7f2/project/7f2ca4b7-29ff-46fa-8810-bb1149c0e034)
 ![GitHub issues](https://img.shields.io/github/issues/Calyr3x/Workly)
+[![Activity](https://img.shields.io/github/commit-activity/m/Calyr3x/Workly)](https://github.com/Calyr3x/Workly)
 
 Workly – это веб-приложение для управления задачами и работы в команде. Оно предоставляет простой и эффективный интерфейс для управления задачами, создания команд и отслеживания прогресса.
 
