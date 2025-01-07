@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"workly/usecase"
 
@@ -33,8 +34,13 @@ func (h *TeamHandler) CreateTeam(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = json.NewEncoder(w).Encode(map[string]int{"team_id": teamID})
+	if err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]int{"team_id": teamID})
 }
 
 func (h *TeamHandler) GetTeams(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +50,13 @@ func (h *TeamHandler) GetTeams(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to retrieve teams", http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(teams)
+
+	err = json.NewEncoder(w).Encode(teams)
+	if err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *TeamHandler) AddMember(w http.ResponseWriter, r *http.Request) {
@@ -93,5 +105,11 @@ func (h *TeamHandler) GetUserAvatar(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to retrieve avatar", http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]string{"avatar": avatar})
+
+	err = json.NewEncoder(w).Encode(map[string]string{"avatar": avatar})
+	if err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }
