@@ -2,9 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
-	"log"
-
 	"workly/config"
 
 	_ "github.com/lib/pq"
@@ -12,18 +11,20 @@ import (
 
 var DB *sql.DB
 
-func InitDB(cfg config.DBConfig) {
-	var err error
+func InitDB(cfg config.DBConfig) error {
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
 		cfg.User, cfg.Password, cfg.DBName, cfg.SSLMode)
 
+	var err error
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = DB.Ping()
 	if err != nil {
-		log.Fatal("Failed to connect to the database: ", err)
+		return errors.New("Failed to connect to database:" + err.Error())
 	}
+
+	return nil
 }
