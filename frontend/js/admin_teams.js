@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const avatar = await getUserAvatar(member);
                 teamHTML += `
                 <li>
-                    <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='http://localhost:63342/imgs/profileIcons/default-avatar.png';" />
+                    <img src="${avatar}" alt="${member}'s avatar" onerror="this.src='http://localhost:63342/frontend/imgs/profileIcons/default-avatar.png';" />
                     ${member} ${member === ownerUsername ? `(Создатель)` : ''}
                     ${isOwner && member !== username ? `<button class="remove-member" data-team-id="${team.ID}" data-member="${member}">Удалить</button>` : ''}
                 </li>`;
