@@ -148,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+                teamSelect.innerHTML = '';
+
                 // Добавляем команды в селектор
                 teams.forEach(team => {
                     const option = document.createElement('option');
@@ -161,15 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     teamsMap[team.ID] = team.Members;
                 });
 
-                // Если только одна команда, сразу отображаем её участников
-                if (teams.length === 1) {
-                    teamSelect.value = teams[0].ID;  // Устанавливаем значение в селекторе
-                    loadMembers(teamsMap[teams[0].ID]);  // Загружаем участников команды
-                } else {
-                    // Если больше одной команды, отображаем участников первой команды по умолчанию
-                    teamSelect.value = teams[0].ID;  // Устанавливаем первую команду как выбранную
-                    loadMembers(teamsMap[teams[0].ID]);
-                }
+                teamSelect.value = teams[0].ID;  // Устанавливаем значение в селекторе
+                loadMembers(teamsMap[teams[0].ID]);  // Загружаем участников команды
 
                 // Добавляем обработчик изменения команды
                 teamSelect.addEventListener('change', () => {
