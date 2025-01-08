@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (userIdsResponse.ok) {
                     const userIds = await userIdsResponse.json();
-                    accessUserIds = userIds.map(user => user.id); // Предполагаем, что ответ содержит id
+                    accessUserIds = userIds.map(user => user.ID); // Предполагаем, что ответ содержит id
                 } else {
                     alert('Ошибка получения ID участников');
                     return;
