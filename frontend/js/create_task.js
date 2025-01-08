@@ -40,12 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для открытия окна просмотра задачи
     const openTaskViewModal = (task) => {
         const deadline = new Date(task.Deadline);
-        const createdAt = new Date(task.Created_at);
+        const createdAt = new Date(task.CreatedAt);
         const now = new Date();
 
         document.getElementById('viewTaskTitle').textContent = task.Name;
         document.getElementById('viewTaskDescription').textContent = task.Description;
-        document.getElementById('viewTaskDeadline').querySelector('span').textContent = deadline.toLocaleDateString();
+        document.getElementById('viewTaskDeadline').querySelector('span').textContent = deadline.toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        })
 
         // Обработчик кнопки "Редактировать"
         document.getElementById('editTaskButton').onclick = () => {
@@ -73,36 +80,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const timePassed = now - createdAt; // Прошедшее время от создания до текущего момента
         const timeRemaining = Math.max(0, deadline - now); // Оставшееся время до дедлайна в миллисекундах
 
+        // Рассчитываем прогресс-бар
+        const progressBar = document.getElementById('progressBar');
+        let progressPercentage;
+
+        if (now > deadline) {
+            // Если задача просрочена
+            progressPercentage = 100;
+            progressBar.style.backgroundColor = 'red';
+        } else {
+            // Если задача не просрочена
+            progressPercentage = Math.min(100, (timePassed / totalDuration) * 100);
+            progressBar.style.backgroundColor = ''; // Убираем цвет, если ранее был установлен красный
+        }
+
+        progressBar.style.width = `${progressPercentage}%`;
+
         const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
         const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
 
-        // Создаем массив частей времени, исключая нулевые значения
         const timeParts = [];
         if (daysRemaining > 0) timeParts.push(`${daysRemaining}д`);
         if (hoursRemaining > 0) timeParts.push(`${hoursRemaining}ч`);
         if (minutesRemaining > 0) timeParts.push(`${minutesRemaining}м`);
-
-        // Обновление прогресс-бара
-        const progressBar = document.getElementById('progressBar');
-        const progressPercentage = Math.max(0, Math.min(100, (timePassed / totalDuration) * 100));
-        progressBar.style.width = `${progressPercentage}%`;
-
-        if (daysRemaining <= 0 && hoursRemaining <= 0 && minutesRemaining <= 0) {
-            timeParts.push('Задача просрочена');
-            progressBar.style.backgroundColor = 'red'
-        }
-
-        // Соединяем части в одну строку
-        const timeText = timeParts.join(' ');
+        if (timeRemaining <= 0) timeParts.push('Задача просрочена');
 
         // Обновление текста
-        document.getElementById('timeRemainingValue').textContent = timeText;
+        document.getElementById('timeRemainingValue').textContent = timeParts.join(' ');
 
         // Обновление оставшегося времени каждую минуту
         setTimeout(() => updateTimeRemaining(deadline, createdAt, new Date()), 60000);
     }
-
 
     // Функция для закрытия модальных окон
     const closeModal = () => {
@@ -344,7 +353,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3>${task.Name}</h3>
                         <span class="status-badge ${task.Status.toLowerCase()}">${getStatusLabel(task.Status)}</span>
                     </div>
-                    <p class="task-deadline">Дедлайн: ${deadline.toLocaleString()}</p>
+                    <p class="task-deadline">Дедлайн: ${deadline.toLocaleString(undefined, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    })}</p> 
                     <p class="task-description">${task.Description}</p>
                 `;
                     li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
