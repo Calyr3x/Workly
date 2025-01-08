@@ -41,11 +41,16 @@ func (r *TeamRepositoryImpl) GetUserIDByUsername(username string) (uuid.UUID, er
 
 func (r *TeamRepositoryImpl) GetTeamsByUserID(userID uuid.UUID) ([]domain.Team, error) {
 	rows, err := r.db.Query(`
-		SELECT t.id, t.name, t.owner_id, array_agg(u.username)
+		SELECT DISTINCT t.id, t.name, t.owner_id, array_agg(DISTINCT u.username)
 		FROM teams t
 		JOIN team_members tm ON t.id = tm.team_id
 		JOIN users u ON tm.user_id = u.id
-		WHERE t.owner_id = $1 OR u.id = $1
+		WHERE t.id IN (
+			SELECT t1.id
+			FROM teams t1
+			JOIN team_members tm1 ON t1.id = tm1.team_id
+			WHERE t1.owner_id = $1 OR tm1.user_id = $1
+		)
 		GROUP BY t.id, t.name, t.owner_id`, userID)
 	if err != nil {
 		return nil, err
