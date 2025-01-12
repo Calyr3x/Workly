@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"encoding/json"
 	"workly/domain"
 
 	"github.com/google/uuid"
@@ -18,10 +19,25 @@ func NewTaskRepository(db *sql.DB) *TaskRepositoryImpl {
 
 func (r *TaskRepositoryImpl) GetTasksByUserID(userID uuid.UUID) ([]domain.Task, error) {
 	rows, err := r.db.Query(`
-		SELECT t.id, t.name, t.description, t.deadline, t.created_at, t.creator_id, t.status
+       SELECT t.id, t.name, t.description, t.deadline, t.created_at, 
+       t.creator_id, t.status,
+       COALESCE(
+           json_agg(
+               json_build_object(
+                   'id', c.id,
+                   'name', COALESCE(c.name, ''),
+                   'color', COALESCE(c.color, '')
+               )
+           ) FILTER (WHERE c.id IS NOT NULL),
+           '[]'
+       ) as categories
 		FROM tasks t
 		INNER JOIN task_access ta ON t.id = ta.task_id
-		WHERE ta.user_id = $1`, userID)
+		LEFT JOIN task_categories tc ON t.id = tc.task_id
+		LEFT JOIN categories c ON tc.category_id = c.id
+		WHERE ta.user_id = $1
+		GROUP BY t.id
+    `, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -30,10 +46,28 @@ func (r *TaskRepositoryImpl) GetTasksByUserID(userID uuid.UUID) ([]domain.Task, 
 	var tasks []domain.Task
 	for rows.Next() {
 		var task domain.Task
-		err := rows.Scan(&task.ID, &task.Name, &task.Description, &task.Deadline, &task.CreatedAt, &task.CreatorID, &task.Status)
+		var categoriesJSON []byte // JSON с категориями
+
+		// Сканируем данные задачи и категории
+		err := rows.Scan(
+			&task.ID,
+			&task.Name,
+			&task.Description,
+			&task.Deadline,
+			&task.CreatedAt,
+			&task.CreatorID,
+			&task.Status,
+			&categoriesJSON,
+		)
 		if err != nil {
 			return nil, err
 		}
+
+		// Десериализуем категории из JSON в массив структур
+		if err := json.Unmarshal(categoriesJSON, &task.Categories); err != nil {
+			return nil, err
+		}
+
 		tasks = append(tasks, task)
 	}
 	return tasks, nil
