@@ -13,15 +13,23 @@ CREATE TABLE IF NOT EXISTS tasks (
     deadline    TIMESTAMP WITH TIME ZONE,
     created_at  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     creator_id  UUID NOT NULL,
-    status      TEXT
+    status      TEXT,
+    categories  TEXT[]
 );
 
 CREATE TABLE IF NOT EXISTS task_access (
-      task_id UUID NOT NULL,
-      user_id UUID NOT NULL,
-      PRIMARY KEY (task_id, user_id),
-      FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    task_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    PRIMARY KEY (task_id, user_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS categories
+(
+    id   SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    color TEXT
 );
 
 CREATE TABLE IF NOT EXISTS teams (
