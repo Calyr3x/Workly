@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: sha256:70153577523740eb50ab2b68d7bc894db5498f34d594252dad73229400973e2a
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
