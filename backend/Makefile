@@ -4,8 +4,8 @@ MAKEFLAGS += --no-print-directory
 GIT_BRANCH := $(shell git branch --show-current)
 
 start:
-	docker-compose up -d
-	go run $(CURDIR)/app/main.go
+	@docker-compose up -d
+	@go run $(CURDIR)/app/main.go
 
 lint:
 	@echo "Running linters..."
@@ -16,13 +16,13 @@ lint:
 checks: lint
 
 stop:
-	docker-compose down
+	@docker-compose down
 
 done:
 	@$(MAKE) checks
 	@$(MAKE) task-stage
 
 task-stage:
-	git add .
-	git commit -m "$(commit)"
-	git push origin $(GIT_BRANCH)
+	@git add .
+	@git commit -m "$(commit)"
+	@git push origin $(GIT_BRANCH)
