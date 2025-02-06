@@ -123,10 +123,6 @@ main {
     color: #ffffff;
 }
 
-.task-item:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
 /* Модальное окно */
 .modal {
     display: none;
@@ -331,7 +327,7 @@ main {
     height: 20px;
     background-color: #769cc7;
     /* Цвет прогресс-бара */
-    width: 0%;
+    width: 0;
     /* Начальная ширина */
     transition: width 0.5s ease-in-out;
 }
@@ -414,7 +410,7 @@ main {
     overflow: hidden;
     padding: 1rem;
     margin-bottom: 1rem;
-    transition: box-shadow 0.3s ease-in-out;
+    transition: border-color 0.4s linear;
     border: 2px solid #f0f0f0;
 }
 
@@ -462,7 +458,7 @@ main {
 }
 
 .task-item:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border-color: #0044cc;
 }
 
 .switch {
@@ -471,6 +467,7 @@ main {
     height: 34px;
     margin-right: 10px;
 }
+
 .switch input {
     opacity: 0;
     width: 0;
