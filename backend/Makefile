@@ -5,7 +5,7 @@ GIT_BRANCH := $(shell git branch --show-current)
 
 start:
 	@docker-compose up -d
-	@go run $(CURDIR)/app/main.go
+	@go run $(CURDIR)/main.go
 
 lint:
 	@echo "Running linters..."
