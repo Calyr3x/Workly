@@ -1,6 +1,6 @@
 {
   "builds": [
-    { "src": "frontend/(.*)", "dest": "frontend/$1" }
+    { "src": "frontend/**", "use": "@vercel/static", "config": { "distDir": "frontend" } }
   ],
   "routes": [
     { "src": "/css/(.*)", "dest": "/frontend/css/$1" },
