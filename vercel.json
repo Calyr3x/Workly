@@ -3,9 +3,9 @@
     { "src": "frontend/**", "use": "@vercel/static", "config": { "distDir": "frontend" } }
   ],
   "routes": [
-    { "src": "/css/(.*)", "dest": "/css/$1" },
-    { "src": "/js/(.*)", "dest": "/js/$1" },
-    { "src": "/imgs/(.*)", "dest": "/imgs/$1" },
-    { "src": "/(.*)", "dest": "/html/login.html" }
+    { "src": "/css/(.*)", "dest": "/frontend/css/$1" },
+    { "src": "/js/(.*)", "dest": "/frontend/js/$1" },
+    { "src": "/imgs/(.*)", "dest": "/frontend/imgs/$1" },
+    { "src": "/(.*)", "dest": "/frontend/html/login.html" }
   ]
 }
