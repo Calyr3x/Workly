@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         avatars.forEach(fileName => {
             const img = document.createElement('img');
-            img.src = `/frontend/imgs/profileIcons/${fileName}`;
+            img.src = `/imgs/profileIcons/${fileName}`;
             img.alt = 'Avatar';
             img.classList.add('avatar-thumbnail');
             img.addEventListener('click', () => {
