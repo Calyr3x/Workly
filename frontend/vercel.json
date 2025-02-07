@@ -1,12 +1,12 @@
 {
   "builds": [
-    { "src": "frontend/**", "use": "@vercel/static" }
+    { "src": "/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/css/(.*)", "dest": "/frontend/css/$1" },
-    { "src": "/js/(.*)", "dest": "/frontend/js/$1" },
-    { "src": "/imgs/(.*)", "dest": "/frontend/imgs/$1" },
-    { "src": "/html/(.*)", "dest": "/frontend/html/$1" },
-    { "src": "/", "dest": "/frontend/html/login.html" }
+    { "src": "/css/(.*)", "dest": "/css/$1" },
+    { "src": "/js/(.*)", "dest": "/js/$1" },
+    { "src": "/imgs/(.*)", "dest": "/imgs/$1" },
+    { "src": "/html/(.*)", "dest": "/html/$1" },
+    { "src": "/", "dest": "/html/login.html" }
   ]
 }
