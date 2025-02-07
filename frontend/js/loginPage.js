@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie = `user_id=${userId}; path=/;`;
                 loaderContainer.style.display = 'none';
                 // Успешный вход, перенаправляем на главную страницу
-                window.location.href = 'main.html';
+                window.location.href = 'html/main.html';
             } else {
                 loaderContainer.style.display = 'none';
                 // Неудачный вход
@@ -79,6 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Редирект на страницу регистрации
     registerButton.addEventListener('click', function () {
-        window.location.href = 'register.html';
+        window.location.href = 'html/register.html';
     });
 });
