@@ -40,7 +40,6 @@ func (h *TeamHandler) CreateTeam(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (h *TeamHandler) GetTeams(w http.ResponseWriter, r *http.Request) {

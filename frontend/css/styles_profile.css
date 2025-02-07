@@ -206,7 +206,7 @@ main {
     border-radius: 25%;
     object-fit: cover;
     cursor: pointer;
-    transition: box-shadow 0.3s transform 0.9s;
+    transition: box-shadow 0.3s, transform 0.3s;
 }
 
 .avatar-gallery img:hover {
