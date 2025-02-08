@@ -3,7 +3,6 @@ package app
 import (
 	"log"
 	"net/http"
-	"workly/config"
 	"workly/db"
 	"workly/routes"
 )
@@ -12,10 +11,10 @@ const Version = "1.0.0"
 
 func Run() error {
 	// Загрузка конфигурации
-	cfg := config.LoadConfig()
+	// cfg := config.LoadConfig()
 
 	// Инициализация базы данных
-	if err := db.InitDB(cfg.DB); err != nil {
+	if err := db.InitDB(); err != nil {
 		return err
 	}
 
