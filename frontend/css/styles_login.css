@@ -34,6 +34,12 @@ header {
     text-decoration: none;
 }
 
+.brand-logo {
+    width: 1.5rem;
+    height: auto;
+    margin-bottom: 5px;
+}
+
 .brand-text {
     font-size: 1.5rem;
     font-weight: bold;
