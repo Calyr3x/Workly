@@ -14,6 +14,13 @@ type Task struct {
 	Deadline    time.Time
 	CreatorID   uuid.UUID
 	Status      string
+	Categories  []Category
+}
+
+// Category структура категории задачи
+type Category struct {
+	Name  string
+	Color string
 }
 
 // TaskAccess структура доступа к задаче.

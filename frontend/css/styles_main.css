@@ -644,3 +644,25 @@ option {
     background-color: #ffffff;
     color: #333;
 }
+
+.task-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.task-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.task-category {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
