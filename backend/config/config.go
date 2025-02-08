@@ -1,34 +1,34 @@
 package config
 
 import (
-	"encoding/json"
 	"os"
 )
 
 type DBConfig struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
-	DBName   string `json:"dbname"`
-	SSLMode  string `json:"sslmode"`
+	User     string
+	Password string
+	DBName   string
+	SSLMode  string
 }
 
 type Config struct {
-	DB DBConfig `json:"database"`
+	DB DBConfig
 }
 
-func LoadConfig(path string) (*Config, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
+func LoadConfig() *Config {
+	return &Config{
+		DB: DBConfig{
+			User:     getEnv("DB_USER", "default_user"),
+			Password: getEnv("DB_PASSWORD", "default_password"),
+			DBName:   getEnv("DB_NAME", "postgres"),
+			SSLMode:  getEnv("DB_SSLMODE", "disable"),
+		},
 	}
-	defer file.Close()
+}
 
-	decoder := json.NewDecoder(file)
-	config := &Config{}
-	err = decoder.Decode(config)
-	if err != nil {
-		return nil, err
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
 	}
-
-	return config, nil
+	return defaultValue
 }

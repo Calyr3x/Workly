@@ -12,10 +12,7 @@ const Version = "1.0.0"
 
 func Run() error {
 	// Загрузка конфигурации
-	cfg, err := config.LoadConfig("config/config.json")
-	if err != nil {
-		return err
-	}
+	cfg := config.LoadConfig()
 
 	// Инициализация базы данных
 	if err := db.InitDB(cfg.DB); err != nil {
