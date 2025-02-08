@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function saveAvatar(avatarSrc, userId) {
-        const response = await fetch(`http://localhost:8080/updateAvatar?user_id=${userId}`, {
+        const response = await fetch(`https://workly-production-8296.up.railway.app/updateAvatar?user_id=${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getUserData(userId) {
-        const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
+        const response = await fetch(`https://workly-production-8296.up.railway.app/getUserData?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
             if (data.Username) {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newUsername = usernameInput.value;
 
-        const response = await fetch(`http://localhost:8080/updateUsername?user_id=${userId}`, {
+        const response = await fetch(`https://workly-production-8296.up.railway.app/updateUsername?user_id=${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

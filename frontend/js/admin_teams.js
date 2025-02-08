@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для получения команд пользователя
     async function getTeams(userId) {
-        const response = await fetch(`http://localhost:8080/getTeams?user_id=${userId}`);
+        const response = await fetch(`https://workly-production-8296.up.railway.app/getTeams?user_id=${userId}`);
         if (response.ok) {
             const teams = await response.json();
             if (teams === null) {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для получения аватара пользователя
     async function getUserAvatar(username) {
-        const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
+        const response = await fetch(`https://workly-production-8296.up.railway.app/getUserAvatar?username=${username}`);
         if (response.ok) {
             const data = await response.json();
             return data.avatar;
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getUserData(userId) {
-        const response = await fetch(`http://localhost:8080/getUserData?user_id=${userId}`);
+        const response = await fetch(`https://workly-production-8296.up.railway.app/getUserData?user_id=${userId}`);
         if (response.ok) {
             const data = await response.json();
             if (data.Username) {
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const teamId = Number(event.target.dataset.teamId);
         const member = event.target.dataset.member;
 
-        const response = await fetch('http://localhost:8080/removeMember', {
+        const response = await fetch('https://workly-production-8296.up.railway.app/removeMember', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!username) return;
 
-            const response = await fetch(`http://localhost:8080/getUserAvatar?username=${username}`);
+            const response = await fetch(`https://workly-production-8296.up.railway.app/getUserAvatar?username=${username}`);
             if (response.ok) {
                 const data = await response.json();
 
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (member) {
-                const response = await fetch('http://localhost:8080/addMember', {
+                const response = await fetch('https://workly-production-8296.up.railway.app/addMember', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
