@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleLogin(email, password) {
         try {
-            const response = await fetch('http://workly-production-8296.up.railway.app:8080/login', {
+            const response = await fetch('https://workly-production-8296.up.railway.app/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
