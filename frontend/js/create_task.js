@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadTeams() {
         try {
-            const response = await fetch(`http://localhost:8080/getTeams?user_id=${userId}`);
+            const response = await fetch(`https://workly-production-8296.up.railway.app/getTeams?user_id=${userId}`);
             if (response.ok) {
                 const teams = await response.json();
 
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Получаем ID участников команды по их юзернеймам
                 const members = teamsMap[selectedTeamId]; // Массив юзернеймов
-                const userIdsResponse = await fetch(`http://localhost:8080/getUserIds`, {
+                const userIdsResponse = await fetch(`https://workly-production-8296.up.railway.app/getUserIds`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Отправка задачи на бэк
             if (editingTaskID) {
                 loaderContainer.style.display = 'flex';
-                response = await fetch(`http://localhost:8080/tasks/update`, {
+                response = await fetch(`https://workly-production-8296.up.railway.app/tasks/update`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 loaderContainer.style.display = 'flex';
-                response = await fetch('http://localhost:8080/tasks/create', {
+                response = await fetch('https://workly-production-8296.up.railway.app/tasks/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function deleteTask(taskID) {
         try {
             loaderContainer.style.display = 'flex';
-            const response = await fetch(`http://localhost:8080/tasks/delete?id=${taskID}`, {
+            const response = await fetch(`https://workly-production-8296.up.railway.app/tasks/delete?id=${taskID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchTasks(userId) {
         try {
-            const response = await fetch(`http://localhost:8080/tasks?user_id=${userId}`);
+            const response = await fetch(`https://workly-production-8296.up.railway.app/tasks?user_id=${userId}`);
             if (response.ok) {
                 loaderContainer.style.display = 'none';
                 const tasks = await response.json();

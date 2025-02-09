@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleRegistration(email, password, username) {
         try {
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('https://workly-production-8296.up.railway.app/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
