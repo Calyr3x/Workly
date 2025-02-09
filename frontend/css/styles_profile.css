@@ -26,6 +26,12 @@ header {
     align-items: center;
 }
 
+.brand-logo {
+    width: 1.5rem;
+    height: auto;
+    margin-bottom: 5px;
+}
+
 .navbar-brand {
     display: flex;
     align-items: center;
