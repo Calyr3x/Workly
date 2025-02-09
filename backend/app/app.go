@@ -10,9 +10,6 @@ import (
 const Version = "1.0.0"
 
 func Run() error {
-	// Загрузка конфигурации
-	// cfg := config.LoadConfig()
-
 	// Инициализация базы данных
 	if err := db.InitDB(); err != nil {
 		return err

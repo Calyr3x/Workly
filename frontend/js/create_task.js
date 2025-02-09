@@ -348,24 +348,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     li.className = 'task-item';
                     const deadline = new Date(task.Deadline);
 
+                    const categoriesHTML = task.Categories.map(category => `
+                        <span class="task-category" style="background-color: ${category.Color};">
+                            ${category.Name}
+                        </span>
+                    `).join('');
+
                     li.innerHTML = `
-                    <div class="task-header">
-                        <h3>${task.Name}</h3>
-                        <span class="status-badge ${task.Status.toLowerCase()}">${getStatusLabel(task.Status)}</span>
-                    </div>
-                    <p class="task-deadline">Дедлайн: ${deadline.toLocaleString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    })}</p> 
-                    <p class="task-description">${task.Description}</p>
-                `;
-                    li.onclick = () => openTaskViewModal(task);  // Устанавливаем обработчик клика для каждой задачи
+                        <div class="task-header">
+                            <div class="task-title">
+                                <h3>${task.Name}</h3>
+                                <span class="status-badge ${task.Status.toLowerCase()}">
+                                    ${getStatusLabel(task.Status)}
+                                </span>
+                            </div>
+                            <div class="task-categories">
+                                ${categoriesHTML}
+                            </div>
+                        </div>
+                        <p class="task-deadline">Дедлайн: ${deadline.toLocaleString(undefined, {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}</p>
+                        <p class="task-description">${task.Description}</p>
+                    `;
+                    li.onclick = () => openTaskViewModal(task);
                     taskList.appendChild(li);
-                    loaderContainer.style.display = 'none';
+                loaderContainer.style.display = 'none';
                 });
             } else {
                 loaderContainer.style.display = 'none';

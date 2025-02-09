@@ -18,8 +18,8 @@ type Config struct {
 func LoadConfig() *Config {
 	return &Config{
 		DB: DBConfig{
-			User:     getEnv("DB_USER", "default_user"),
-			Password: getEnv("DB_PASSWORD", "default_password"),
+			User:     getEnv("DB_USER", "admin"),
+			Password: getEnv("DB_PASSWORD", "password"),
 			DBName:   getEnv("DB_NAME", "postgres"),
 			SSLMode:  getEnv("DB_SSLMODE", "disable"),
 		},
