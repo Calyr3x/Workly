@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для получения команд пользователя
     async function getTeams(userId) {
+        loaderContainer.style.display = 'flex';
         const response = await fetch(`https://workly-production-8296.up.railway.app/getTeams?user_id=${userId}`);
         if (response.ok) {
             const teams = await response.json();
@@ -186,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Ошибка при добавлении участника');
                 }
             }
-            loaderContainer.style.display = 'flex';
             // Загрузить команды при загрузке страницы
             getTeams(userId);
         });
@@ -201,8 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.add-member').forEach(button => {
         button.addEventListener('click', handleAddMember);
     });
-
-    loaderContainer.style.display = 'flex';
     // Загрузить команды при загрузке страницы
     getTeams(userId);
 });
