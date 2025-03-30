@@ -1,2 +1,4 @@
 backend/config/config.json
 backend/docker-compose.yml
+
+backend/lint.log
