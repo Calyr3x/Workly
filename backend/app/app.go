@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"workly/db"
+	"workly/integration/rabbitMQ"
 	"workly/routes"
 )
 
@@ -23,6 +24,16 @@ func Run() error {
 
 	// Регистрация маршрутов
 	routes.RegisterRoutes(deps.UserHandler, deps.TaskHandler, deps.TeamHandler)
+
+	rabbitCfg := rabbitMQ.RabbitMQConfig{
+		Host:     "localhost",
+		Port:     5672,
+		User:     "user",
+		Password: "pass",
+		VHost:    "",
+	}
+
+	NewRabbitMQ(rabbitCfg)
 
 	// Запуск сервера
 	log.Printf(">>>>>> Version: %v <<<<<\n", Version)

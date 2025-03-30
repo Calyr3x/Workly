@@ -16,6 +16,7 @@ func InitDB() error {
 	}
 
 	var err error
+
 	DB, err = sql.Open("postgres", dbURL)
 	if err != nil {
 		return err

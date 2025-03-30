@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+// Message – (DTO) для пересылки в очередь.
+type Message struct {
+	ID      string
+	Content string
+}
+
 // Task структура задачи.
 type Task struct {
 	ID          uuid.UUID
